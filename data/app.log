@@ -1,0 +1,477 @@
+2026-11-12T15:05:22.951Z  STARTUP FAILED: imagesFolder does not exist: C:/SSO-test/images
+2026-11-12T15:08:30.802Z  Server started at http://localhost:4000
+2026-11-12T15:08:30.805Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-12T15:09:36.959Z  Scan started
+2026-11-12T15:09:36.961Z  Scan finished: 0 images, 0 bytes, 0 warnings
+2026-11-12T15:11:40.512Z  Scan started
+2026-11-12T15:11:40.515Z  Scan finished: 0 images, 0 bytes, 0 warnings
+2026-11-12T15:13:02.176Z  Scan started
+2026-11-12T15:13:02.179Z  Scan finished: 2 images, 18749474 bytes, 0 warnings
+2026-11-12T15:13:55.841Z  Making smaller copies started (2 images in list)
+2026-11-12T15:13:55.842Z  Making smaller copy: pexels-tomfisk-1519753__id148_job55.jpg
+2026-11-12T15:30:11.296Z  Server started at http://localhost:4000
+2026-11-12T15:30:11.298Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-12T15:30:43.355Z  Scan started
+2026-11-12T15:30:43.359Z  Scan finished: 2 images, 18749474 bytes, 0 warnings
+2026-11-12T15:30:46.107Z  Making smaller copies started (2 images in list)
+2026-11-12T15:30:46.108Z  Making smaller copy: pexels-tomfisk-1519753__id148_job55.jpg
+2026-11-12T15:44:52.264Z  Server started at http://localhost:4000
+2026-11-12T15:44:52.265Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-12T15:45:06.429Z  Scan started
+2026-11-12T15:45:06.433Z  Scan finished: 2 images, 18749474 bytes, 0 warnings
+2026-11-12T15:45:08.810Z  Making smaller copies started (2 images in list)
+2026-11-12T15:45:08.811Z  Making smaller copy: pexels-tomfisk-1519753__id148_job55.jpg
+2026-11-12T15:45:17.345Z    smaller copy written, now comparing: pexels-tomfisk-1519753__id148_job55.jpg
+2026-11-12T15:45:19.454Z    comparison done: SSIM 0.9988695884049913
+2026-11-12T15:45:19.454Z  Done: pexels-tomfisk-1519753__id148_job55.jpg -> 10195116 bytes, saving 3.8%, SSIM 0.9989
+2026-11-12T15:45:19.456Z  Making smaller copy: pexels-fotios-photos-1540258__id149_job54.jpg
+2026-11-12T15:45:26.679Z    smaller copy written, now comparing: pexels-fotios-photos-1540258__id149_job54.jpg
+2026-11-12T15:45:28.355Z    comparison done: SSIM 0.998388730557572
+2026-11-12T15:45:28.357Z  Done: pexels-fotios-photos-1540258__id149_job54.jpg -> 7878048 bytes, saving 3.4%, SSIM 0.9984
+2026-11-12T15:45:28.359Z  Making smaller copies finished: {"made":2,"alreadyDone":0,"tooSmall":0,"failed":0}
+2026-11-12T16:03:04.550Z  Server started at http://localhost:4000
+2026-11-12T16:03:04.552Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-12T16:05:11.876Z  Scan started
+2026-11-12T16:05:11.881Z  Scan finished: 2 images, 18749474 bytes, 0 warnings
+2026-11-12T16:05:55.549Z  Use smaller version started: pexels-tomfisk-1519753__id148_job55.jpg
+2026-11-12T16:05:55.705Z    a) original is safe in the vault and checked
+2026-11-12T16:05:55.762Z    b,c) smaller file swapped in under the same name
+2026-11-12T16:05:55.808Z    d) new file checked: it opens and matches
+2026-11-12T16:05:55.811Z  Use smaller version finished: pexels-tomfisk-1519753__id148_job55.jpg: Replaced with the smaller version. Saved 388 KB. Original is in the vault.
+2026-11-12T16:05:59.598Z  Keep original started: pexels-fotios-photos-1540258__id149_job54.jpg
+2026-11-12T16:05:59.599Z  Keep original finished: pexels-fotios-photos-1540258__id149_job54.jpg: You chose to keep the original. Nothing was changed.
+2026-11-12T16:08:41.900Z  Server started at http://localhost:4000
+2026-11-12T16:08:41.903Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-12T16:08:47.060Z  Scan started
+2026-11-12T16:08:47.063Z  Scan finished: 2 images, 18352220 bytes, 0 warnings
+2026-11-12T16:09:55.711Z  Scan started
+2026-11-12T16:09:55.717Z  Scan finished: 12 images, 21429694 bytes, 0 warnings
+2026-11-12T16:10:06.940Z  Making smaller copies started (12 images in list)
+2026-11-12T16:10:06.941Z  Making smaller copy: aedrian-salazar-Tws17PwytpA-unsplash.jpg
+2026-11-12T16:10:09.750Z    smaller copy written, now comparing: aedrian-salazar-Tws17PwytpA-unsplash.jpg
+2026-11-12T16:10:12.123Z    comparison done: SSIM 0.9943259013851149
+2026-11-12T16:10:12.124Z  Done: aedrian-salazar-Tws17PwytpA-unsplash.jpg -> 1645966 bytes, saving 40.9%, SSIM 0.9943
+2026-11-12T16:10:12.125Z  Making smaller copies finished: {"made":1,"alreadyDone":2,"tooSmall":9,"failed":0}
+2026-11-12T16:11:04.140Z  Replace all green started: 1 images
+2026-11-12T16:11:04.141Z  Use smaller version started: aedrian-salazar-Tws17PwytpA-unsplash.jpg
+2026-11-12T16:11:04.187Z    a) original is safe in the vault and checked
+2026-11-12T16:11:04.196Z    b,c) smaller file swapped in under the same name
+2026-11-12T16:11:04.212Z    d) new file checked: it opens and matches
+2026-11-12T16:11:04.214Z  Use smaller version finished: aedrian-salazar-Tws17PwytpA-unsplash.jpg: Replaced with the smaller version. Saved 1.08 MB. Original is in the vault.
+2026-11-12T16:11:04.215Z  Replace all green finished: Replaced 1 of 1 green images. Saved 1.08 MB. 
+2026-11-12T16:18:15.591Z  Server started at http://localhost:4000
+2026-11-12T16:18:15.593Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-12T16:20:46.368Z  Scan started
+2026-11-12T16:20:46.372Z  Scan finished: 12 images, 20292451 bytes, 0 warnings
+2026-11-12T16:20:58.196Z  Making smaller copies started (12 images in list)
+2026-11-12T16:20:58.197Z  Making smaller copies finished: {"made":0,"alreadyDone":3,"tooSmall":9,"failed":0}
+2026-11-12T16:21:00.124Z  Making smaller copies started (12 images in list)
+2026-11-12T16:21:00.125Z  Making smaller copies finished: {"made":0,"alreadyDone":3,"tooSmall":9,"failed":0}
+2026-11-12T16:21:00.355Z  Making smaller copies started (12 images in list)
+2026-11-12T16:21:00.356Z  Making smaller copies finished: {"made":0,"alreadyDone":3,"tooSmall":9,"failed":0}
+2026-11-12T16:22:45.267Z  Scan started
+2026-11-12T16:22:45.271Z  Scan finished: 13 images, 22046472 bytes, 0 warnings
+2026-11-12T16:22:54.064Z  Making smaller copies started (13 images in list)
+2026-11-12T16:22:54.065Z  Making smaller copy: national-gallery-of-art-13gZzBl4cGc-unsplash.jpg
+2026-11-12T16:22:55.664Z    smaller copy written, now comparing: national-gallery-of-art-13gZzBl4cGc-unsplash.jpg
+2026-11-12T16:22:57.709Z    comparison done: SSIM 0.9866451089034077
+2026-11-12T16:22:57.710Z  Done: national-gallery-of-art-13gZzBl4cGc-unsplash.jpg -> 1264989 bytes, saving 27.9%, SSIM 0.9866
+2026-11-12T16:22:57.712Z  Making smaller copies finished: {"made":1,"alreadyDone":3,"tooSmall":9,"failed":0}
+2026-11-12T16:24:22.603Z  Use smaller version started: national-gallery-of-art-13gZzBl4cGc-unsplash.jpg
+2026-11-12T16:24:22.638Z    a) original is safe in the vault and checked
+2026-11-12T16:24:22.646Z    b,c) smaller file swapped in under the same name
+2026-11-12T16:24:22.656Z    d) new file checked: it opens and matches
+2026-11-12T16:24:22.657Z  Use smaller version finished: national-gallery-of-art-13gZzBl4cGc-unsplash.jpg: Replaced with the smaller version. Saved 478 KB. Original is in the vault.
+2026-11-12T16:27:37.370Z  Server started at http://localhost:4000
+2026-11-12T16:27:37.372Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-12T16:27:43.300Z  Scan started
+2026-11-12T16:27:43.305Z  Scan finished: 13 images, 21557440 bytes, 0 warnings
+2026-11-12T16:32:46.097Z  Server started at http://localhost:4000
+2026-11-12T16:32:46.099Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-12T16:33:03.971Z  Scan started
+2026-11-12T16:33:03.974Z  Scan finished: 13 images, 21557440 bytes, 0 warnings
+2026-11-12T16:35:34.413Z  Server started at http://localhost:4000
+2026-11-12T16:35:34.415Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-12T16:35:40.303Z  Scan started
+2026-11-12T16:35:40.307Z  Scan finished: 13 images, 21557440 bytes, 0 warnings
+2026-11-17T04:40:14.389Z  Server started at http://localhost:4000
+2026-11-17T04:40:14.399Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-17T04:40:22.998Z  Scan started
+2026-11-17T04:40:23.039Z  Scan finished: 13 images, 21557440 bytes, 0 warnings
+2026-11-17T04:40:30.201Z  Making smaller copies started (13 images in list)
+2026-11-17T04:40:30.204Z  Making smaller copies finished: {"made":0,"alreadyDone":4,"tooSmall":9,"failed":0}
+2026-11-17T04:43:56.413Z  Scan started
+2026-11-17T04:43:56.421Z  Scan finished: 18 images, 21879047 bytes, 0 warnings
+2026-11-17T04:45:50.634Z  Scan started
+2026-11-17T04:45:50.639Z  Scan finished: 18 images, 21879047 bytes, 0 warnings
+2026-11-17T04:45:54.479Z  Scan started
+2026-11-17T04:45:54.485Z  Scan finished: 18 images, 21879047 bytes, 0 warnings
+2026-11-17T04:45:55.327Z  Scan started
+2026-11-17T04:45:55.332Z  Scan finished: 18 images, 21879047 bytes, 0 warnings
+2026-11-17T04:45:59.809Z  Scan started
+2026-11-17T04:45:59.814Z  Scan finished: 18 images, 21879047 bytes, 0 warnings
+2026-11-17T04:46:17.170Z  Scan started
+2026-11-17T04:46:17.176Z  Scan finished: 18 images, 21879047 bytes, 0 warnings
+2026-11-17T04:46:20.802Z  Scan started
+2026-11-17T04:46:20.831Z  Scan finished: 18 images, 21879047 bytes, 0 warnings
+2026-11-17T04:46:22.957Z  Scan started
+2026-11-17T04:46:22.961Z  Scan finished: 18 images, 21879047 bytes, 0 warnings
+2026-11-17T04:47:02.300Z  Scan started
+2026-11-17T04:47:02.307Z  Scan finished: 18 images, 21879047 bytes, 0 warnings
+2026-11-17T04:47:03.187Z  Scan started
+2026-11-17T04:47:03.194Z  Scan finished: 18 images, 21879047 bytes, 0 warnings
+2026-11-17T04:47:13.780Z  Scan started
+2026-11-17T04:47:13.785Z  Scan finished: 18 images, 21879047 bytes, 0 warnings
+2026-11-17T04:47:58.692Z  Server started at http://localhost:4000
+2026-11-17T04:47:58.701Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-17T04:48:06.053Z  Scan started
+2026-11-17T04:48:06.059Z  Scan finished: 18 images, 21879047 bytes, 0 warnings
+2026-11-17T04:48:36.724Z  Scan started
+2026-11-17T04:48:36.732Z  Scan finished: 18 images, 21879047 bytes, 0 warnings
+2026-11-17T04:48:52.044Z  Scan started
+2026-11-17T04:48:52.051Z  Scan finished: 18 images, 21879047 bytes, 0 warnings
+2026-11-17T04:55:31.668Z  Scan started
+2026-11-17T04:55:31.672Z  Scan finished: 18 images, 21879047 bytes, 0 warnings
+2026-11-17T04:55:32.884Z  Scan started
+2026-11-17T04:55:32.888Z  Scan finished: 18 images, 21879047 bytes, 0 warnings
+2026-11-17T04:55:33.140Z  Scan started
+2026-11-17T04:55:33.146Z  Scan finished: 18 images, 21879047 bytes, 0 warnings
+2026-11-17T04:55:33.285Z  Scan started
+2026-11-17T04:55:33.302Z  Scan finished: 18 images, 21879047 bytes, 0 warnings
+2026-11-17T04:55:33.447Z  Scan started
+2026-11-17T04:55:33.460Z  Scan finished: 18 images, 21879047 bytes, 0 warnings
+2026-11-17T04:55:33.573Z  Scan started
+2026-11-17T04:55:33.581Z  Scan finished: 18 images, 21879047 bytes, 0 warnings
+2026-11-17T04:55:33.718Z  Scan started
+2026-11-17T04:55:33.724Z  Scan finished: 18 images, 21879047 bytes, 0 warnings
+2026-11-17T04:55:33.933Z  Scan started
+2026-11-17T04:55:33.939Z  Scan finished: 18 images, 21879047 bytes, 0 warnings
+2026-11-17T05:01:13.880Z  Scan started
+2026-11-17T05:01:13.884Z  Scan finished: 18 images, 21879047 bytes, 0 warnings
+2026-11-17T05:01:15.095Z  Scan started
+2026-11-17T05:01:15.102Z  Scan finished: 18 images, 21879047 bytes, 0 warnings
+2026-11-17T05:01:43.716Z  Server started at http://localhost:4000
+2026-11-17T05:01:43.721Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-18T04:26:46.771Z  Server started at http://localhost:4000
+2026-11-18T04:26:46.780Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-18T04:35:01.283Z  Scan started
+2026-11-18T04:35:01.311Z  Scan finished: 13 images, 21557440 bytes, 0 warnings
+2026-11-18T04:35:25.875Z  Scan started
+2026-11-18T04:35:25.887Z  Scan finished: 13 images, 21557440 bytes, 0 warnings
+2026-11-18T04:35:26.648Z  Scan started
+2026-11-18T04:35:26.655Z  Scan finished: 13 images, 21557440 bytes, 0 warnings
+2026-11-18T04:35:27.329Z  Scan started
+2026-11-18T04:35:27.336Z  Scan finished: 13 images, 21557440 bytes, 0 warnings
+2026-11-18T04:36:37.314Z  Scan started
+2026-11-18T04:36:37.324Z  Scan finished: 23 images, 36990329 bytes, 0 warnings
+2026-11-18T04:37:15.606Z  Scan started
+2026-11-18T04:37:15.615Z  Scan finished: 23 images, 36990329 bytes, 0 warnings
+2026-11-18T04:37:29.841Z  Making smaller copies started (23 images in list)
+2026-11-18T04:37:29.844Z  Making smaller copy: xx_2.jpg
+2026-11-18T04:37:32.666Z    smaller copy written, now comparing: xx_2.jpg
+2026-11-18T04:37:34.947Z    comparison done: SSIM 0.9983036364384711
+2026-11-18T04:37:34.951Z  Done: xx_2.jpg -> 845562 bytes, saving 84%, SSIM 0.9983
+2026-11-18T04:37:34.957Z  Making smaller copy: 4mb.jpg
+2026-11-18T04:37:35.022Z    smaller copy written, now comparing: 4mb.jpg
+2026-11-18T04:37:35.191Z    comparison done: SSIM 1
+2026-11-18T04:37:35.210Z  Done: 4mb.jpg -> 357 bytes, saving 100%, SSIM 1
+2026-11-18T04:37:35.220Z  Making smaller copy: 3mb-jpg-example-file.jpg
+2026-11-18T04:37:37.640Z    smaller copy written, now comparing: 3mb-jpg-example-file.jpg
+2026-11-18T04:37:40.305Z    comparison done: SSIM 0.9979083557356176
+2026-11-18T04:37:40.308Z  Done: 3mb-jpg-example-file.jpg -> 785708 bytes, saving 75.1%, SSIM 0.9979
+2026-11-18T04:37:40.313Z  Making smaller copy: 2mb-jpg-example-file.jpg
+2026-11-18T04:37:42.122Z    smaller copy written, now comparing: 2mb-jpg-example-file.jpg
+2026-11-18T04:37:44.409Z    comparison done: SSIM 0.9975111637835894
+2026-11-18T04:37:44.414Z  Done: 2mb-jpg-example-file.jpg -> 600964 bytes, saving 75.2%, SSIM 0.9975
+2026-11-18T04:37:44.420Z  Making smaller copies finished: {"made":4,"alreadyDone":4,"tooSmall":15,"failed":0}
+2026-11-18T05:39:17.501Z  Bulk replace started (images saving 80% to 100% with SSIM 0.95 or higher): 2 images
+2026-11-18T05:39:17.503Z  Use smaller version started: xx_2.jpg
+2026-11-18T05:39:17.699Z    a) original is safe in the vault and checked
+2026-11-18T05:39:17.723Z    b,c) smaller file swapped in under the same name
+2026-11-18T05:39:17.753Z    d) new file checked: it opens and matches
+2026-11-18T05:39:17.757Z  Use smaller version finished: xx_2.jpg: Replaced with the smaller version. Saved 4.25 MB. Original is in the vault.
+2026-11-18T05:39:17.758Z  Use smaller version started: 4mb.jpg
+2026-11-18T05:39:17.912Z    a) original is safe in the vault and checked
+2026-11-18T05:39:17.928Z    b,c) smaller file swapped in under the same name
+2026-11-18T05:39:17.963Z    d) new file checked: it opens and matches
+2026-11-18T05:39:17.968Z  Use smaller version finished: 4mb.jpg: Replaced with the smaller version. Saved 4.01 MB. Original is in the vault.
+2026-11-18T05:39:17.971Z  Bulk replace finished: Replaced 2 of 2 images saving 80% to 100% with SSIM 0.95 or higher. Saved 8.25 MB. 
+2026-11-18T05:39:46.321Z  Bulk replace started (images saving 75% to 100% with SSIM 0.95 or higher): 2 images
+2026-11-18T05:39:46.323Z  Use smaller version started: 3mb-jpg-example-file.jpg
+2026-11-18T05:39:46.419Z    a) original is safe in the vault and checked
+2026-11-18T05:39:46.449Z    b,c) smaller file swapped in under the same name
+2026-11-18T05:39:46.482Z    d) new file checked: it opens and matches
+2026-11-18T05:39:46.486Z  Use smaller version finished: 3mb-jpg-example-file.jpg: Replaced with the smaller version. Saved 2.26 MB. Original is in the vault.
+2026-11-18T05:39:46.488Z  Use smaller version started: 2mb-jpg-example-file.jpg
+2026-11-18T05:39:46.581Z    a) original is safe in the vault and checked
+2026-11-18T05:39:46.596Z    b,c) smaller file swapped in under the same name
+2026-11-18T05:39:46.632Z    d) new file checked: it opens and matches
+2026-11-18T05:39:46.640Z  Use smaller version finished: 2mb-jpg-example-file.jpg: Replaced with the smaller version. Saved 1.74 MB. Original is in the vault.
+2026-11-18T05:39:46.641Z  Bulk replace finished: Replaced 2 of 2 images saving 75% to 100% with SSIM 0.95 or higher. Saved 3.99 MB. 
+2026-11-19T04:50:35.887Z  Server started at http://localhost:4000
+2026-11-19T04:50:35.895Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-19T04:52:16.015Z  Scan started
+2026-11-19T04:52:16.029Z  Scan finished: 23 images, 24148834 bytes, 0 warnings
+2026-11-21T06:39:24.136Z  Server started at http://localhost:4000
+2026-11-21T06:39:24.138Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-21T06:39:41.998Z  Scan started
+2026-11-21T06:39:42.016Z  Scan finished: 23 images, 24148834 bytes, 0 warnings
+2026-11-21T06:39:44.127Z  Making smaller copies started (23 images in list)
+2026-11-21T06:39:44.129Z  Making smaller copies finished: {"made":0,"alreadyDone":8,"tooSmall":15,"failed":0}
+2026-11-21T06:45:58.359Z  Server started at http://localhost:4000
+2026-11-21T06:45:58.362Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-21T06:46:07.002Z  Scan started
+2026-11-21T06:46:07.008Z  Scan finished: 23 images, 24148834 bytes, 0 warnings
+2026-11-21T06:46:10.478Z  Making smaller copies started (23 images in list)
+2026-11-21T06:46:10.479Z  Making smaller copies finished: {"made":0,"alreadyDone":8,"tooSmall":15,"failed":0}
+2026-11-21T06:47:14.363Z  Scan started
+2026-11-21T06:47:14.370Z  Scan finished: 23 images, 24148834 bytes, 0 warnings
+2026-11-21T06:47:15.844Z  Making smaller copies started (23 images in list)
+2026-11-21T06:47:15.845Z  Making smaller copies finished: {"made":0,"alreadyDone":8,"tooSmall":15,"failed":0}
+2026-11-21T06:47:45.673Z  Server started at http://localhost:4000
+2026-11-21T06:47:45.676Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-21T06:47:51.131Z  Scan started
+2026-11-21T06:47:51.137Z  Scan finished: 23 images, 24148834 bytes, 0 warnings
+2026-11-21T07:02:30.500Z  Server started at http://localhost:4000
+2026-11-21T07:02:30.502Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-21T07:02:38.324Z  Scan started
+2026-11-21T07:02:38.332Z  Scan finished: 73 images, 37370321 bytes, 0 warnings
+2026-11-21T07:03:17.834Z  Making smaller copies started (73 images in list)
+2026-11-21T07:03:17.835Z  Making smaller copy: Screenshot 2026-11-12 211714.png
+2026-11-21T07:03:19.817Z    smaller copy written, now comparing: Screenshot 2026-11-12 211714.png
+2026-11-21T07:03:20.936Z    comparison done: SSIM 0.9985255618125188
+2026-11-21T07:03:20.937Z  Done: Screenshot 2026-11-12 211714.png -> 212542 bytes, saving 79.1%, SSIM 0.9985
+2026-11-21T07:03:20.938Z  Making smaller copy: Screenshot 2026-11-12 215130.png
+2026-11-21T07:03:21.987Z    smaller copy written, now comparing: Screenshot 2026-11-12 215130.png
+2026-11-21T07:03:22.820Z    comparison done: SSIM 0.998043991284556
+2026-11-21T07:03:22.820Z  Done: Screenshot 2026-11-12 215130.png -> 202395 bytes, saving 76.9%, SSIM 0.998
+2026-11-21T07:03:22.822Z  Making smaller copy: Screenshot 2026-11-12 215138.png
+2026-11-21T07:03:23.687Z    smaller copy written, now comparing: Screenshot 2026-11-12 215138.png
+2026-11-21T07:03:24.538Z    comparison done: SSIM 0.9981437990212324
+2026-11-21T07:03:24.539Z  Done: Screenshot 2026-11-12 215138.png -> 199548 bytes, saving 77.1%, SSIM 0.9981
+2026-11-21T07:03:24.540Z  Making smaller copy: Screenshot 2026-11-03 134626.png
+2026-11-21T07:03:26.476Z    smaller copy written, now comparing: Screenshot 2026-11-03 134626.png
+2026-11-21T07:03:27.458Z    comparison done: SSIM 0.9966253202099898
+2026-11-21T07:03:27.459Z  Done: Screenshot 2026-11-03 134626.png -> 216869 bytes, saving 74.9%, SSIM 0.9966
+2026-11-21T07:03:27.460Z  Making smaller copy: Screenshot 2026-11-03 164627.png
+2026-11-21T07:03:29.004Z    smaller copy written, now comparing: Screenshot 2026-11-03 164627.png
+2026-11-21T07:03:29.971Z    comparison done: SSIM 0.9959272252134324
+2026-11-21T07:03:29.972Z  Done: Screenshot 2026-11-03 164627.png -> 207543 bytes, saving 71.8%, SSIM 0.9959
+2026-11-21T07:03:29.973Z  Making smaller copy: Screenshot 2026-11-03 163451.png
+2026-11-21T07:03:31.286Z    smaller copy written, now comparing: Screenshot 2026-11-03 163451.png
+2026-11-21T07:03:32.150Z    comparison done: SSIM 0.9982544529017222
+2026-11-21T07:03:32.151Z  Done: Screenshot 2026-11-03 163451.png -> 159471 bytes, saving 76.6%, SSIM 0.9983
+2026-11-21T07:03:32.152Z  Making smaller copy: Screenshot 2026-11-17 102543.png
+2026-11-21T07:03:33.646Z    smaller copy written, now comparing: Screenshot 2026-11-17 102543.png
+2026-11-21T07:03:34.410Z    comparison done: SSIM 0.994376550627428
+2026-11-21T07:03:34.411Z  Done: Screenshot 2026-11-17 102543.png -> 141390 bytes, saving 75.7%, SSIM 0.9944
+2026-11-21T07:03:34.413Z  Making smaller copy: Screenshot 2026-11-11 220251.png
+2026-11-21T07:03:35.035Z    smaller copy written, now comparing: Screenshot 2026-11-11 220251.png
+2026-11-21T07:03:35.889Z    comparison done: SSIM 0.9978284057786658
+2026-11-21T07:03:35.889Z  Done: Screenshot 2026-11-11 220251.png -> 161590 bytes, saving 70%, SSIM 0.9978
+2026-11-21T07:03:35.891Z  Making smaller copy: Screenshot 2026-11-11 215356.png
+2026-11-21T07:03:36.679Z    smaller copy written, now comparing: Screenshot 2026-11-11 215356.png
+2026-11-21T07:03:37.679Z    comparison done: SSIM 0.9954390976727312
+2026-11-21T07:03:37.681Z  Done: Screenshot 2026-11-11 215356.png -> 148831 bytes, saving 71.2%, SSIM 0.9954
+2026-11-21T07:03:37.684Z  Making smaller copies finished: {"made":9,"alreadyDone":8,"tooSmall":56,"failed":0}
+2026-11-21T07:27:16.875Z  Scan started
+2026-11-21T07:27:16.890Z  Scan finished: 73 images, 37370321 bytes, 0 warnings
+2026-11-21T10:04:00.559Z  Server started at http://localhost:4000
+2026-11-21T10:04:00.563Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-21T10:04:11.966Z  Scan started
+2026-11-21T10:04:11.987Z  Scan finished: 73 images, 37370321 bytes, 0 warnings
+2026-11-21T10:04:15.535Z  PDF check started
+2026-11-21T10:04:15.540Z  PDF check finished: 0 PDFs found, 0 checked, estimated saving 0 B, 0 s
+2026-11-21T10:04:18.964Z  Making smaller copies started (73 images in list)
+2026-11-21T10:04:18.966Z  Making smaller copies finished: {"made":0,"alreadyDone":17,"tooSmall":56,"failed":0}
+2026-11-21T10:18:13.505Z  Server started at http://localhost:4000
+2026-11-21T10:18:13.510Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-21T10:18:18.005Z  Scan started
+2026-11-21T10:18:18.013Z  Scan finished: 73 images, 37370321 bytes, 0 warnings
+2026-11-21T10:18:22.284Z  PDF check started
+2026-11-21T10:18:23.303Z  PDF check finished: 1 PDFs found, 1 checked, estimated saving 0 B, 1 s
+2026-11-24T05:45:31.589Z  Server started at http://localhost:4000
+2026-11-24T05:45:31.591Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-24T05:45:53.758Z  Scan started
+2026-11-24T05:45:53.775Z  Scan finished: 73 images, 37370321 bytes, 0 warnings, 0 s
+2026-11-24T05:45:59.008Z  PDF check started
+2026-11-24T05:45:59.492Z  PDF check finished: 1 PDFs found, 1 checked, estimated saving 0 B, 0 s
+2026-11-24T05:55:09.527Z  Scan started
+2026-11-24T05:55:09.536Z  Scan finished: 81 images, 39590770 bytes, 0 warnings, 0 s
+2026-11-24T05:55:14.123Z  Making smaller copies started (81 images in list)
+2026-11-24T05:55:14.136Z  Making smaller copy: xray.jpg
+2026-11-24T05:55:14.344Z    smaller copy written, now comparing: xray.jpg
+2026-11-24T05:55:15.638Z    comparison done: SSIM 0.9774944690567092
+2026-11-24T05:55:15.640Z  Done: xray.jpg -> 143732 bytes, saving 80%, SSIM 0.9775
+2026-11-24T05:55:15.654Z  Making smaller copies finished: {"made":1,"alreadyDone":17,"tooSmall":63,"failed":0}
+2026-11-24T05:56:30.651Z  Bulk replace started (green images): 9 images
+2026-11-24T05:56:30.651Z  Use smaller version started: Screenshot 2026-11-12 211714.png
+2026-11-24T05:56:30.672Z    a) original is safe in the vault and checked
+2026-11-24T05:56:30.677Z    b,c) smaller file swapped in under the same name
+2026-11-24T05:56:30.682Z    d) new file checked: it opens and matches
+2026-11-24T05:56:30.684Z  Use smaller version finished: Screenshot 2026-11-12 211714.png: Replaced with the smaller version. Saved 785 KB. Original is in the vault.
+2026-11-24T05:56:30.685Z  Use smaller version started: Screenshot 2026-11-12 215130.png
+2026-11-24T05:56:30.703Z    a) original is safe in the vault and checked
+2026-11-24T05:56:30.707Z    b,c) smaller file swapped in under the same name
+2026-11-24T05:56:30.712Z    d) new file checked: it opens and matches
+2026-11-24T05:56:30.714Z  Use smaller version finished: Screenshot 2026-11-12 215130.png: Replaced with the smaller version. Saved 658 KB. Original is in the vault.
+2026-11-24T05:56:30.714Z  Use smaller version started: Screenshot 2026-11-12 215138.png
+2026-11-24T05:56:30.732Z    a) original is safe in the vault and checked
+2026-11-24T05:56:30.736Z    b,c) smaller file swapped in under the same name
+2026-11-24T05:56:30.744Z    d) new file checked: it opens and matches
+2026-11-24T05:56:30.746Z  Use smaller version finished: Screenshot 2026-11-12 215138.png: Replaced with the smaller version. Saved 654 KB. Original is in the vault.
+2026-11-24T05:56:30.747Z  Use smaller version started: Screenshot 2026-11-03 134626.png
+2026-11-24T05:56:30.767Z    a) original is safe in the vault and checked
+2026-11-24T05:56:30.773Z    b,c) smaller file swapped in under the same name
+2026-11-24T05:56:30.779Z    d) new file checked: it opens and matches
+2026-11-24T05:56:30.781Z  Use smaller version finished: Screenshot 2026-11-03 134626.png: Replaced with the smaller version. Saved 631 KB. Original is in the vault.
+2026-11-24T05:56:30.782Z  Use smaller version started: Screenshot 2026-11-03 164627.png
+2026-11-24T05:56:30.800Z    a) original is safe in the vault and checked
+2026-11-24T05:56:30.805Z    b,c) smaller file swapped in under the same name
+2026-11-24T05:56:30.810Z    d) new file checked: it opens and matches
+2026-11-24T05:56:30.813Z  Use smaller version finished: Screenshot 2026-11-03 164627.png: Replaced with the smaller version. Saved 516 KB. Original is in the vault.
+2026-11-24T05:56:30.814Z  Use smaller version started: Screenshot 2026-11-03 163451.png
+2026-11-24T05:56:30.832Z    a) original is safe in the vault and checked
+2026-11-24T05:56:30.840Z    b,c) smaller file swapped in under the same name
+2026-11-24T05:56:30.846Z    d) new file checked: it opens and matches
+2026-11-24T05:56:30.849Z  Use smaller version finished: Screenshot 2026-11-03 163451.png: Replaced with the smaller version. Saved 511 KB. Original is in the vault.
+2026-11-24T05:56:30.850Z  Use smaller version started: Screenshot 2026-11-17 102543.png
+2026-11-24T05:56:30.865Z    a) original is safe in the vault and checked
+2026-11-24T05:56:30.870Z    b,c) smaller file swapped in under the same name
+2026-11-24T05:56:30.876Z    d) new file checked: it opens and matches
+2026-11-24T05:56:30.878Z  Use smaller version finished: Screenshot 2026-11-17 102543.png: Replaced with the smaller version. Saved 430 KB. Original is in the vault.
+2026-11-24T05:56:30.879Z  Use smaller version started: Screenshot 2026-11-11 220251.png
+2026-11-24T05:56:30.895Z    a) original is safe in the vault and checked
+2026-11-24T05:56:30.899Z    b,c) smaller file swapped in under the same name
+2026-11-24T05:56:30.906Z    d) new file checked: it opens and matches
+2026-11-24T05:56:30.908Z  Use smaller version finished: Screenshot 2026-11-11 220251.png: Replaced with the smaller version. Saved 368 KB. Original is in the vault.
+2026-11-24T05:56:30.909Z  Use smaller version started: Screenshot 2026-11-11 215356.png
+2026-11-24T05:56:30.924Z    a) original is safe in the vault and checked
+2026-11-24T05:56:30.928Z    b,c) smaller file swapped in under the same name
+2026-11-24T05:56:30.933Z    d) new file checked: it opens and matches
+2026-11-24T05:56:30.937Z  Use smaller version finished: Screenshot 2026-11-11 215356.png: Replaced with the smaller version. Saved 360 KB. Original is in the vault.
+2026-11-24T05:56:30.938Z  Bulk replace finished: Replaced 9 of 9 green images. Saved 4.80 MB. 
+2026-11-25T06:40:06.789Z  Server started at http://localhost:4000
+2026-11-25T06:40:06.796Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-25T06:40:12.503Z  Scan started
+2026-11-25T06:40:12.526Z  Scan finished: 81 images, 34558635 bytes, 0 warnings, 0 s
+2026-11-25T06:40:13.498Z  Scan started
+2026-11-25T06:40:13.522Z  Scan finished: 81 images, 34558635 bytes, 0 warnings, 0 s
+2026-11-25T06:40:14.180Z  Scan started
+2026-11-25T06:40:14.195Z  Scan finished: 81 images, 34558635 bytes, 0 warnings, 0 s
+2026-11-25T06:40:14.564Z  Scan started
+2026-11-25T06:40:14.588Z  Scan finished: 81 images, 34558635 bytes, 0 warnings, 0 s
+2026-11-25T06:40:14.715Z  Scan started
+2026-11-25T06:40:14.736Z  Scan finished: 81 images, 34558635 bytes, 0 warnings, 0 s
+2026-11-25T06:40:14.889Z  Scan started
+2026-11-25T06:40:14.918Z  Scan finished: 81 images, 34558635 bytes, 0 warnings, 0 s
+2026-11-25T06:40:15.052Z  Scan started
+2026-11-25T06:40:15.076Z  Scan finished: 81 images, 34558635 bytes, 0 warnings, 0 s
+2026-11-25T06:40:15.209Z  Scan started
+2026-11-25T06:40:15.228Z  Scan finished: 81 images, 34558635 bytes, 0 warnings, 0 s
+2026-11-25T06:40:15.377Z  Scan started
+2026-11-25T06:40:15.399Z  Scan finished: 81 images, 34558635 bytes, 0 warnings, 0 s
+2026-11-25T06:40:15.524Z  Scan started
+2026-11-25T06:40:15.583Z  Scan finished: 81 images, 34558635 bytes, 0 warnings, 0.1 s
+2026-11-25T06:40:15.660Z  Scan started
+2026-11-25T06:40:15.723Z  Scan finished: 81 images, 34558635 bytes, 0 warnings, 0.1 s
+2026-11-25T06:40:15.798Z  Scan started
+2026-11-25T06:40:15.836Z  Scan finished: 81 images, 34558635 bytes, 0 warnings, 0 s
+2026-11-25T06:40:16.008Z  Scan started
+2026-11-25T06:40:16.025Z  Scan finished: 81 images, 34558635 bytes, 0 warnings, 0 s
+2026-11-25T06:54:48.353Z  Scan started
+2026-11-25T06:54:48.387Z  Scan finished: 91 images, 35379073 bytes, 0 warnings, 0 s
+2026-11-25T07:04:54.743Z  Scan started
+2026-11-25T07:04:54.768Z  Scan finished: 91 images, 35379073 bytes, 0 warnings, 0 s
+2026-11-25T07:04:58.154Z  PDF check started
+2026-11-25T07:04:59.496Z  PDF check finished: 2 PDFs found, 2 checked, estimated saving 294 KB, 1 s
+2026-11-25T07:05:19.575Z  Smaller PDF copy started: 2.2 Accessibility Workshop - Image Examples in PDF.pdf
+2026-11-25T07:05:20.860Z    PDF picture shrunk: 159296 to 116883 bytes, SSIM 0.9973
+2026-11-25T07:05:23.542Z    PDF picture shrunk: 906293 to 647621 bytes, SSIM 0.9951
+2026-11-25T07:05:23.682Z    PDF safety check passed: 1 page(s), 52 parts identical, 2 picture(s)
+2026-11-25T07:05:23.685Z  Smaller PDF copy done: 2.2 Accessibility Workshop - Image Examples in PDF.pdf, 1.23 MB, 19% smaller, lowest SSIM 0.9951
+2026-11-25T07:05:30.205Z  Use smaller PDF started: 2.2 Accessibility Workshop - Image Examples in PDF.pdf
+2026-11-25T07:05:30.302Z    a) original PDF is safe in the vault and checked
+2026-11-25T07:05:30.333Z    b,c) smaller PDF swapped in under the same name
+2026-11-25T07:05:30.369Z    d) new PDF checked: it opens and matches
+2026-11-25T07:05:30.378Z  Use smaller PDF finished: 2.2 Accessibility Workshop - Image Examples in PDF.pdf: Replaced with the smaller version. Saved 294 KB. Original is in the vault.
+2026-11-25T07:08:24.331Z  PDF check started
+2026-11-25T07:08:25.839Z  PDF check finished: 3 PDFs found, 3 checked, estimated saving 0 B, 2 s
+2026-11-25T07:08:32.579Z  Smaller PDF copy started: test-image.pdf
+2026-11-25T07:08:32.721Z  Smaller PDF copy not made: test-image.pdf: No picture could be made at least 5% smaller.
+2026-11-25T07:08:39.031Z  Smaller PDF copy started: test-image.pdf
+2026-11-25T07:08:39.176Z  Smaller PDF copy not made: test-image.pdf: No picture could be made at least 5% smaller.
+2026-11-25T07:08:40.332Z  Smaller PDF copy started: test-image.pdf
+2026-11-25T07:08:40.471Z  Smaller PDF copy not made: test-image.pdf: No picture could be made at least 5% smaller.
+2026-11-25T07:08:41.933Z  Making smaller copies started (91 images in list)
+2026-11-25T07:08:41.944Z  Making smaller copies finished: {"made":0,"alreadyDone":18,"tooSmall":73,"failed":0}
+2026-11-25T07:11:03.630Z  Restore original PDF started: 2.2 Accessibility Workshop - Image Examples in PDF.pdf
+2026-11-25T07:11:03.801Z  Restore original PDF finished: 2.2 Accessibility Workshop - Image Examples in PDF.pdf: Original restored from the vault and checked.
+2026-11-25T07:29:01.707Z  Smaller PDF copy started: 2.2 Accessibility Workshop - Image Examples in PDF.pdf
+2026-11-25T07:29:03.079Z    PDF picture shrunk: 159296 to 116883 bytes, SSIM 0.9973
+2026-11-25T07:29:05.563Z    PDF picture shrunk: 906293 to 647621 bytes, SSIM 0.9951
+2026-11-25T07:29:05.683Z    PDF safety check passed: 1 page(s), 52 parts identical, 2 picture(s)
+2026-11-25T07:29:05.687Z  Smaller PDF copy done: 2.2 Accessibility Workshop - Image Examples in PDF.pdf, 1.23 MB, 19% smaller, lowest SSIM 0.9951
+2026-11-26T04:55:59.912Z  Server started at http://localhost:4000
+2026-11-26T04:55:59.915Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-26T04:56:23.362Z  Scan started
+2026-11-26T04:56:23.372Z  Scan finished: 91 images, 35379073 bytes, 0 warnings, 0 s
+2026-11-26T04:58:52.372Z  PDF check started
+2026-11-26T04:58:52.957Z  PDF check finished: 3 PDFs found, 3 checked, estimated saving 294 KB, 1 s
+2026-11-26T08:03:42.985Z  Server started at http://localhost:4000
+2026-11-26T08:03:42.989Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-26T08:12:33.244Z  Scan started
+2026-11-26T08:12:33.265Z  Scan finished: 91 images, 35379073 bytes, 0 warnings, 0 s
+2026-11-26T08:12:33.442Z  PDF check started
+2026-11-26T08:12:35.161Z  PDF check finished: 3 PDFs found, 3 checked, estimated saving 294 KB, 2 s
+2026-11-26T08:13:07.349Z  Server started at http://localhost:4000
+2026-11-26T08:13:07.352Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-26T08:13:17.031Z  Scan started
+2026-11-26T08:13:17.064Z  Scan finished: 91 images, 35379073 bytes, 0 warnings, 0 s
+2026-11-26T08:13:17.142Z  PDF check started
+2026-11-26T08:13:18.741Z  PDF check finished: 3 PDFs found, 3 checked, estimated saving 294 KB, 2 s
+2026-11-26T08:27:26.645Z  Server started at http://localhost:4000
+2026-11-26T08:27:26.649Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-26T08:27:36.550Z  Scan started
+2026-11-26T08:27:36.577Z  Scan finished: 91 images, 35379073 bytes, 3 PDFs, 7005114 bytes, 0 warnings, 0 s
+2026-11-26T08:27:56.048Z  PDF check started
+2026-11-26T08:27:57.590Z  PDF check finished: 3 PDFs found, 3 checked, estimated saving 294 KB, 2 s
+2026-11-26T08:30:44.644Z  Scan started
+2026-11-26T08:30:44.665Z  Scan finished: 91 images, 35379073 bytes, 4 PDFs, 7200282 bytes, 0 warnings, 0 s
+2026-11-26T08:30:54.915Z  Making smaller copies started (91 images and 4 PDFs in list)
+2026-11-26T08:30:54.918Z  Making smaller PDF copy: dictionary.pdf
+2026-11-26T08:30:55.953Z  No smaller PDF copy: dictionary.pdf: No JPEG picture of 50 KB or more to shrink.
+2026-11-26T08:30:55.957Z  Making smaller PDF copy: test-image.pdf
+2026-11-26T08:30:56.113Z  No smaller PDF copy: test-image.pdf: No picture could be made at least 5% smaller.
+2026-11-26T08:30:56.124Z  Making smaller copies finished: {"made":0,"alreadyDone":18,"tooSmall":73,"failed":0,"pdfMade":0,"pdfAlreadyDone":1,"pdfTooSmall":1,"pdfNoCopy":2,"pdfFailed":0}
+2026-11-26T09:39:48.856Z  Server started at http://localhost:4000
+2026-11-26T09:39:48.861Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-26T09:39:57.707Z  Scan started
+2026-11-26T09:39:57.738Z  Scan finished: 91 images, 35379073 bytes, 4 PDFs, 7200282 bytes, 0 warnings, 0 s
+2026-11-26T09:43:20.809Z  Server started at http://localhost:4000
+2026-11-26T09:43:20.813Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-26T09:45:26.440Z  Server started at http://localhost:4000
+2026-11-26T09:45:26.444Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-26T09:50:50.682Z  Server started at http://localhost:4000
+2026-11-26T09:50:50.686Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-26T09:53:46.718Z  Server started at http://localhost:4000
+2026-11-26T09:53:46.722Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-26T09:55:37.239Z  Server started at http://localhost:4000
+2026-11-26T09:55:37.243Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-26T11:04:19.393Z  Server started at http://localhost:4000
+2026-11-26T11:04:19.397Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-26T11:11:20.069Z  Scan started
+2026-11-26T11:11:20.083Z  Scan finished: 91 images, 35379073 bytes, 4 PDFs, 7200282 bytes, 0 warnings, 0 s
+2026-11-26T11:11:47.982Z  Bulk replace started (images saving 20% to 80% with SSIM 0.95 or higher): 1 images
+2026-11-26T11:11:47.983Z  Use smaller version started: xray.jpg
+2026-11-26T11:11:48.022Z    a) original is safe in the vault and checked
+2026-11-26T11:11:48.026Z    b,c) smaller file swapped in under the same name
+2026-11-26T11:11:48.038Z    d) new file checked: it opens and matches
+2026-11-26T11:11:48.042Z  Use smaller version finished: xray.jpg: Replaced with the smaller version. Saved 561 KB. Original is in the vault.
+2026-11-26T11:11:48.044Z  Bulk replace finished: Replaced 1 of 1 images saving 20% to 80% with SSIM 0.95 or higher. Saved 561 KB. 
+2026-11-26T11:12:20.303Z  Scan started
+2026-11-26T11:12:20.318Z  Scan finished: 91 images, 34804746 bytes, 4 PDFs, 7200282 bytes, 0 warnings, 0 s
+2026-11-26T11:12:21.714Z  Making smaller copies started (91 images and 4 PDFs in list)
+2026-11-26T11:12:21.717Z  Making smaller copies finished: {"made":0,"alreadyDone":18,"tooSmall":73,"failed":0,"pdfMade":0,"pdfAlreadyDone":1,"pdfTooSmall":1,"pdfNoCopy":2,"pdfFailed":0}
+2026-11-26T11:12:28.266Z  Restore original started: xray.jpg
+2026-11-26T11:12:28.301Z  Restore original finished: xray.jpg: Original restored from the vault and checked.

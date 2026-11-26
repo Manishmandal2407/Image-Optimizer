@@ -1,0 +1,79 @@
+@if (total() === 0) {
+  <div class="empty">
+    <h3>No PDFs to review yet</h3>
+    <p>Scan your folder, then choose Make smaller copies. PDFs with big JPEG pictures inside will show up here.</p>
+  </div>
+} @else {
+  <app-pager [total]="total()" [page]="page()" [pageSize]="pageSize()" (pageChange)="pageChange.emit($event)" />
+
+  @for (d of items(); track d.relativePath) {
+    @if (d.smaller; as s) {
+      <article class="rcard">
+        <header class="rhead">
+          <div class="file">
+            <strong [title]="d.relativePath">{{ fileName(d.relativePath) }}</strong>
+            <span>{{ folderName(d.relativePath) }}</span>
+          </div>
+          <span [class]="'pill ' + (suggestion(d) ?? 'grey')">{{ label(d) }}</span>
+          @if (d.outcome) {
+            <span [class]="'pill ' + pill(d).cls">{{ pill(d).text }}</span>
+          }
+        </header>
+
+        @if (d.outcome) {
+          <p class="rnote" [class.bad]="d.outcome.action === 'failed'">{{ statusText(d) }}</p>
+        } @else {
+          <p class="rnote">{{ reason(d) }} {{ s.picturesShrunk }} of {{ s.picturesFound }} picture(s) inside were shrunk.</p>
+        }
+
+        @if (d.outcome?.action !== 'replaced') {
+          <div class="stage">
+            <figure>
+              <figcaption>
+                Original, {{ formatSize(d.sizeBytes) }}
+                <a class="openlink" [href]="url('original', d)" target="_blank" rel="noopener">Open in new tab</a>
+              </figcaption>
+              <iframe [src]="frame('original', d)" title="Original PDF" loading="lazy"></iframe>
+            </figure>
+            <figure>
+              <figcaption>
+                Smaller copy, {{ formatSize(s.sizeBytes) }}
+                <a class="openlink" [href]="url('smaller', d)" target="_blank" rel="noopener">Open in new tab</a>
+              </figcaption>
+              <iframe [src]="frame('smaller', d)" title="Smaller PDF" loading="lazy"></iframe>
+            </figure>
+          </div>
+        }
+
+        <div class="metrics">
+          <div class="metric"><span>Original</span><strong>{{ formatSize(originalSize(d)) }}</strong></div>
+          <div class="metric"><span>Smaller copy</span><strong>{{ formatSize(s.sizeBytes) }}</strong></div>
+          <div class="metric hl"><span>Saved</span><strong>{{ s.savingPercent }}%</strong><small>{{ formatSize(originalSize(d) - s.sizeBytes) }}</small></div>
+          <div [class]="'metric tinted ' + ssimBand(s.ssim)" title="1 means identical. The lower the score, the more the pictures have changed.">
+            <span>Similarity (SSIM)</span><strong>{{ s.ssim }}</strong>
+          </div>
+        </div>
+
+        <div [class]="'ssim ' + ssimBand(s.ssim)">
+          <p><strong>Similarity {{ s.ssim }}:</strong> {{ ssimMeaning(s.ssim) }}</p>
+          <div class="ssim-scale" aria-hidden="true">
+            <b class="tick"></b>
+            <i [style.left.%]="ssimPosition(s.ssim)"></i>
+          </div>
+          <div class="ssim-ends"><span>0.90 or lower</span><span class="mid">0.99 and up is green</span><span>1.0 identical</span></div>
+        </div>
+
+        <div class="ractions">
+          @if (d.outcome?.action === 'replaced') {
+            <button class="btn" (click)="restore.emit(d.relativePath)" [disabled]="busy()">Restore original</button>
+          } @else if (d.outcome?.action !== 'kept') {
+            <button class="btn solid" (click)="useSmaller.emit(d.relativePath)" [disabled]="busy()">Use smaller version</button>
+            <button class="btn" (click)="keepOriginal.emit(d.relativePath)" [disabled]="busy()">Keep original</button>
+          }
+        </div>
+      </article>
+    }
+  }
+
+  <app-pager [total]="total()" [page]="page()" [pageSize]="pageSize()" (pageChange)="pageChange.emit($event)" />
+}

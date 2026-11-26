@@ -1,0 +1,15 @@
+@if (total() > pageSize()) {
+  <nav class="pager" aria-label="Pages">
+    <span class="muted">Showing {{ fmt(first()) }} to {{ fmt(last()) }} of {{ fmt(total()) }}</span>
+    <div class="pager-nums">
+      @for (it of items(); track $index) {
+        @if (it === null) {
+          <span class="pg-gap" aria-hidden="true">&hellip;</span>
+        } @else {
+          <button type="button" class="pg" [class.current]="it === page()" [attr.aria-current]="it === page() ? 'page' : null"
+            [attr.aria-label]="'Page ' + it" (click)="go(it)">{{ it }}</button>
+        }
+      }
+    </div>
+  </nav>
+}

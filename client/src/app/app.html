@@ -1,0 +1,300 @@
+<header class="top">
+  <div class="brand">
+    <svg class="logo" viewBox="0 0 40 40" aria-hidden="true">
+      <rect width="40" height="40" rx="9" fill="#0e8f6e"/>
+      <rect x="10" y="10" width="20" height="20" rx="4" fill="none" stroke="#fff" stroke-width="2.2"/>
+      <path d="M14 14l4.5 4.5M26 14l-4.5 4.5M14 26l4.5-4.5M26 26l-4.5-4.5" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/>
+    </svg>
+    <h1>Smart Storage Optimizer</h1>
+  </div>
+  @if (folders(); as f) {
+    <div class="trail">
+      <span title="Your images are read from here"><b>Images</b> <code>{{ f.imagesFolder }}</code></span>
+      <span title="Originals are copied here before anything is replaced"><b>Vault</b> <code>{{ f.vaultFolder }}</code></span>
+      <span title="Smaller test copies are made here"><b>Work</b> <code>{{ f.workFolder }}</code></span>
+    </div>
+  }
+</header>
+
+<div class="layout">
+  <aside class="rail">
+    <section class="ledger">
+      <h2>Space saved</h2>
+      <p class="big">{{ formatSize(savedBytes()) }}</p>
+      <div class="bar" role="img" [attr.aria-label]="'Saved ' + formatSize(savedBytes()) + ', could still save ' + formatSize(couldSave())">
+        <span class="saved" [style.width.%]="savedPct()"></span>
+        <span class="could" [style.width.%]="couldPct()"></span>
+      </div>
+      <dl>
+        <div><dt>Library now</dt><dd>{{ summary().count }} images, {{ formatSize(totalBytes()) }}</dd></div>
+        <div><dt>PDFs</dt><dd>{{ docSummary().count }} PDFs, {{ formatSize(docSummary().totalBytes) }}</dd></div>
+        <div><dt>Replaced so far</dt><dd>{{ replacedCount() }}</dd></div>
+        <div><dt>Could still save</dt><dd>{{ formatSize(couldSave()) }}</dd></div>
+      </dl>
+    </section>
+
+    <ol class="flow">
+      <li [class.done]="summary().count > 0 || docSummary().count > 0">
+        <span class="n">1</span>
+        <div>
+          <h3>Scan folder</h3>
+          <p>Finds your JPG and PNG images and your PDFs. Nothing is changed.</p>
+          <button class="btn solid" (click)="scan()" [disabled]="busy()">Scan folder</button>
+        </div>
+      </li>
+      <li [class.done]="readyCount() > 0">
+        <span class="n">2</span>
+        <div>
+          <h3>Make smaller copies</h3>
+          <p>Creates test copies of your images and PDFs in the work folder. Your originals are not touched.</p>
+          <button class="btn solid" (click)="makeSmallerCopies()" [disabled]="busy() || (summary().count === 0 && docSummary().count === 0)">Make smaller copies</button>
+        </div>
+      </li>
+      <li [class.done]="decidedCount() > 0">
+        <span class="n">3</span>
+        <div>
+          <h3>Review and replace</h3>
+          <p>Compare each picture or PDF, then decide. Every original is saved to the vault first.</p>
+          <button class="btn" (click)="show('review')" [disabled]="readyCount() === 0">Open Review</button>
+        </div>
+      </li>
+    </ol>
+
+    <p class="safe">Runs only on this PC. Nothing changes unless you click a button.</p>
+  </aside>
+
+  <main>
+    @if (busy()) {
+      <div class="banner busy" role="status">
+        <span class="spinner"></span>
+        <div>
+          <strong>{{ busyText() }}</strong>
+          @if (progress(); as p) {
+            <div class="pbar"><i [style.width.%]="progressPct()"></i></div>
+            <div class="ptext">
+              <span>{{ p.done }} of {{ p.total }}</span>
+              <button class="btn" (click)="stop()" [disabled]="p.stopping">
+                {{ p.stopping ? 'Stopping after this file...' : 'Stop' }}
+              </button>
+            </div>
+          } @else {
+            <div class="indeterminate"></div>
+          }
+        </div>
+      </div>
+    }
+    @if (errorMessage()) {
+      <div class="banner error" role="alert">
+        <span>{{ errorMessage() }}</span>
+        <button class="x" (click)="dismiss()" aria-label="Dismiss message">&times;</button>
+      </div>
+    }
+    @if (infoMessage()) {
+      <div class="banner ok" role="status">
+        <span>{{ infoMessage() }}</span>
+        <button class="x" (click)="dismiss()" aria-label="Dismiss message">&times;</button>
+      </div>
+    }
+
+    <nav class="tabs">
+      <button [class.active]="view() === 'list'" (click)="show('list')">Images <span class="count">{{ summary().count }}</span></button>
+      <button [class.active]="view() === 'review'" (click)="show('review')">Review <span class="count">{{ readyCount() }}</span></button>
+      <button [class.active]="view() === 'documents'" (click)="show('documents')">Documents <span class="count">{{ docSummary().count }}</span></button>
+      <button [class.active]="view() === 'results'" (click)="show('results')">Results</button>
+    </nav>
+
+    @if (view() === 'review') {
+      <section class="rpanel" aria-label="Review controls">
+        <div class="rpanel-top">
+          <div class="toggle" role="group" aria-label="What to review">
+            <button [class.active]="reviewKind() === 'images'" (click)="reviewKind.set('images')">Images <span class="cnt">{{ summary().readyCount }}</span></button>
+            <button [class.active]="reviewKind() === 'pdfs'" (click)="reviewKind.set('pdfs')">PDFs <span class="cnt">{{ docSummary().readyCount }}</span></button>
+          </div>
+          @if (reviewKind() === 'images') {
+            <div class="toggle" role="group" aria-label="How to compare">
+              <button [class.active]="reviewMode() === 'side'" (click)="reviewMode.set('side')">Side by side</button>
+              <button [class.active]="reviewMode() === 'slider'" (click)="reviewMode.set('slider')">Slider</button>
+            </div>
+          }
+        <div class="help" tabindex="0">
+          <span class="hbtn">What is SSIM?</span>
+          <div class="pop">
+            <p><strong>1.0 means identical.</strong> The lower the score, the more the picture has changed.</p>
+            <table class="guide">
+              <tr><td><span class="chip band-identical">0.9999 to 1</span></td><td>Identical</td></tr>
+              <tr><td><span class="chip band-same">0.99 to 0.9998</span></td><td>Looks the same (green)</td></tr>
+              <tr><td><span class="chip band-small">0.95 to 0.99</span></td><td>Small differences (amber)</td></tr>
+              <tr><td><span class="chip band-some">0.90 to 0.95</span></td><td>Visible differences (amber)</td></tr>
+              <tr><td><span class="chip band-clear">Below 0.90</span></td><td>Clearly different (amber)</td></tr>
+            </table>
+            <p class="muted">Green also needs a saving of at least 5%. The score is a guide, so look at the pictures before you decide.</p>
+          </div>
+        </div>
+        </div>
+
+        <div class="rpanel-actions">
+          <div class="act">
+            <div class="act-text">
+              <strong>Replace all green ones</strong>
+              <span>
+                {{ reviewKind() === 'images' ? 'Images' : 'PDFs' }} that look the same (SSIM 0.99 or higher) and save 5% or more,
+                which you have not decided about yet.
+              </span>
+            </div>
+            <div class="act-ctl">
+              @if (reviewKind() === 'images') {
+                <button class="btn save" (click)="askReplaceGreen()" [disabled]="busy() || greenWaiting() === 0">Replace {{ greenWaiting() }} images</button>
+              } @else {
+                <button class="btn save" (click)="askReplaceReadyPdfs()" [disabled]="busy() || pdfReadyCount() === 0">Replace {{ pdfReadyCount() }} PDFs</button>
+              }
+            </div>
+          </div>
+
+          @if (reviewKind() === 'images') {
+            <div class="act">
+              <div class="act-text">
+                <strong>Replace by saving</strong>
+                <span>Replace images whose saving is inside this range, with SSIM {{ minSsim }} or higher.</span>
+              </div>
+              <div class="act-ctl">
+                <label>From
+                  <input type="number" min="0" max="100" step="1" [value]="fromPct()" (input)="setFrom($event)" aria-label="Lowest saving in percent"><i>%</i>
+                </label>
+                <label>to
+                  <input type="number" min="0" max="100" step="1" [value]="toPct()" (input)="setTo($event)" aria-label="Highest saving in percent"><i>%</i>
+                </label>
+                <button class="btn save" (click)="askRange()" [disabled]="busy() || !rangeValid() || rangeCount() === 0">Replace {{ rangeCount() }} images</button>
+              </div>
+              @if (!rangeValid()) {
+                <span class="err">Type numbers from 0 to 100. The first cannot be bigger than the second.</span>
+              }
+            </div>
+          }
+        </div>
+
+        <p class="rpanel-foot">Each original is copied to your vault and checked before anything is replaced. These buttons work on all pages, not only the one you see.</p>
+      </section>
+
+      @if (reviewKind() === 'images') {
+        <app-review
+          [items]="reviewData().items"
+          [total]="reviewData().total"
+          [page]="reviewData().page"
+          [pageSize]="reviewPageSize"
+          [mode]="reviewMode()"
+          [busy]="busy()"
+          (pageChange)="goReviewPage($event)"
+          (useSmaller)="useSmaller($event)"
+          (keepOriginal)="keepOriginal($event)"
+          (restore)="restore($event)" />
+      } @else {
+        <app-pdf-review
+          [items]="docReviewData().items"
+          [total]="docReviewData().total"
+          [page]="docReviewData().page"
+          [pageSize]="docReviewPageSize"
+          [busy]="busy()"
+          (pageChange)="goDocReviewPage($event)"
+          (useSmaller)="pdfAction('replace', $event)"
+          (keepOriginal)="pdfAction('keep', $event)"
+          (restore)="pdfAction('restore', $event)" />
+      }
+    } @else if (view() === 'documents') {
+      <app-documents
+        [items]="docListData().items" [total]="docListData().total" [page]="docListData().page" [pageSize]="docListPageSize"
+        [summary]="docSummary()" [report]="pdfReport()" [busy]="busy()"
+        (check)="checkPdfs()" (prepare)="makePdfSmaller($event)" (pageChange)="goDocListPage($event)" />
+    } @else if (view() === 'results') {
+      <app-results [items]="resultsData().items" [total]="resultsData().total" [page]="resultsData().page" [pageSize]="resultsPageSize"
+        [summary]="summary()" [docs]="pdfDocs()" (pageChange)="goResultsPage($event)" />
+    } @else if (summary().count === 0) {
+      <div class="empty">
+        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" stroke="#9aa3b5" stroke-width="2.5" stroke-linejoin="round" aria-hidden="true">
+          <rect x="8" y="12" width="48" height="40" rx="6"/><circle cx="22" cy="26" r="4"/><path d="M10 46l14-14 10 10 8-8 12 12"/>
+        </svg>
+        <h3>No images yet</h3>
+        @if (docSummary().count > 0) {
+          <p>No JPG or PNG images were found. Your PDFs are in the Documents tab.</p>
+        } @else {
+          <p>Choose Scan folder to find the JPG and PNG images and the PDFs in your images folder.</p>
+        }
+      </div>
+    } @else {
+      <p class="muted sortnote">Biggest savings first. Images without a smaller copy yet come last, biggest file first.</p>
+      <app-pager [total]="listData().total" [page]="listData().page" [pageSize]="listPageSize" (pageChange)="goListPage($event)" />
+      <div class="list">
+        <div class="lhead cols-images">
+          <span></span><span>File</span><span class="num">Size</span><span>Status</span><span>Smaller copy</span>
+        </div>
+        @for (img of listData().items; track img.relativePath) {
+          <div class="row cols-images">
+            <img class="thumb" [src]="thumbUrl(img)" alt="" loading="lazy">
+            <div class="file">
+              <strong [title]="img.relativePath">{{ fileName(img.relativePath) }}</strong>
+              <span>{{ folderName(img.relativePath) }}</span>
+            </div>
+            <div class="num">{{ formatSize(originalSize(img)) }}</div>
+            <div><span [class]="'pill ' + pill(img).cls">{{ pill(img).text }}</span></div>
+            <div>
+              @if (img.smaller) {
+                <div class="meter"><i [style.width.%]="meterWidth(img)"></i></div>
+                <span class="meter-text">{{ formatSize(img.smaller.sizeBytes) }}, {{ img.smaller.savingPercent }}% smaller, SSIM {{ img.smaller.ssim }}</span>
+              } @else if (img.error) {
+                <span class="err">{{ img.error }}</span>
+              } @else {
+                <span class="muted">Not made yet</span>
+              }
+            </div>
+          </div>
+        }
+      </div>
+      <app-pager [total]="listData().total" [page]="listData().page" [pageSize]="listPageSize" (pageChange)="goListPage($event)" />
+    }
+  </main>
+</div>
+
+@if (confirmOpen()) {
+  <div class="scrim" (click)="confirmOpen.set(false)">
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="confirm-title" (click)="$event.stopPropagation()">
+      <h2 id="confirm-title">Replace {{ greenWaiting() }} images?</h2>
+      <p>Each original is copied to your vault and checked first. You can restore any of them later.</p>
+      <div class="acts">
+        <button class="btn" (click)="confirmOpen.set(false)">Cancel</button>
+        <button class="btn save" (click)="confirmReplaceGreen()">Replace {{ greenWaiting() }} images</button>
+      </div>
+    </div>
+  </div>
+}
+
+@if (pdfConfirmOpen()) {
+  <div class="scrim" (click)="pdfConfirmOpen.set(false)">
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="pdf-confirm-title" (click)="$event.stopPropagation()">
+      <h2 id="pdf-confirm-title">Replace {{ pdfReadyCount() }} PDFs?</h2>
+      <p>
+        These PDFs have a safety-checked smaller copy that saves 5% or more, with a picture SSIM of 0.99 or higher.
+        Each original is copied to your vault and checked first, and you can restore any of them later.
+      </p>
+      <div class="acts">
+        <button class="btn" (click)="pdfConfirmOpen.set(false)">Cancel</button>
+        <button class="btn save" (click)="confirmReplaceReadyPdfs()">Replace {{ pdfReadyCount() }} PDFs</button>
+      </div>
+    </div>
+  </div>
+}
+
+@if (rangeRequest(); as r) {
+  <div class="scrim" (click)="rangeRequest.set(null)">
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="range-title" (click)="$event.stopPropagation()">
+      <h2 id="range-title">Replace {{ r.n }} images?</h2>
+      <p>
+        These images save {{ r.from }}% to {{ r.to }}% and have an SSIM of 0.95 or higher.
+        You have not looked at them one by one. Each original is copied to your vault and checked first,
+        and you can restore any of them later.
+      </p>
+      <div class="acts">
+        <button class="btn" (click)="rangeRequest.set(null)">Cancel</button>
+        <button class="btn save" (click)="confirmReplaceRange()">Replace {{ r.n }} images</button>
+      </div>
+    </div>
+  </div>
+}

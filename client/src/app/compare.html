@@ -1,0 +1,10 @@
+<div class="cmp">
+  <img class="base" [src]="smaller()" alt="Smaller copy" loading="lazy">
+  <img class="over" [src]="original()" alt="Original" loading="lazy"
+       [style.clip-path]="'inset(0 ' + (100 - pos()) + '% 0 0)'">
+  <span class="tag l">{{ originalLabel() }}</span>
+  <span class="tag r">{{ smallerLabel() }}</span>
+  <input type="range" min="0" max="100" [value]="pos()" (input)="move($event)"
+         aria-label="Drag to compare the original and the smaller copy">
+  <div class="line" [style.left.%]="pos()"><span class="knob">&harr;</span></div>
+</div>

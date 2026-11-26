@@ -1,0 +1,71 @@
+@if (total() === 0 && pdfList().length === 0) {
+  <div class="empty">
+    <svg width="64" height="64" viewBox="0 0 64 64" fill="none" stroke="#9aa3b5" stroke-width="2.5" stroke-linejoin="round" aria-hidden="true">
+      <rect x="8" y="12" width="48" height="40" rx="6"/><circle cx="22" cy="26" r="4"/><path d="M10 46l14-14 10 10 8-8 12 12"/>
+    </svg>
+    <h3>No results yet</h3>
+    <p>Scan your folder to see every file and what happened to it.</p>
+  </div>
+} @else {
+  <div class="rhero">
+    <div><span>Space saved</span><strong>{{ formatSize(totalSaved()) }}</strong></div>
+    <div><span>Replaced</span><strong>{{ replacedCount() }}</strong></div>
+    <div><span>Kept as they were</span><strong>{{ keptCount() }}</strong></div>
+  </div>
+  <p class="muted">Originals stay in the vault. A disk only gains free space if the vault is on a different disk.</p>
+
+  <div class="toggle results-switch" role="group" aria-label="Which files to show">
+    <button [class.active]="kind() === 'images'" (click)="setKind('images')">Images <span class="cnt">{{ total() }}</span></button>
+    <button [class.active]="kind() === 'pdfs'" (click)="setKind('pdfs')">PDFs <span class="cnt">{{ pdfList().length }}</span></button>
+  </div>
+
+  @if (kind() === 'images') {
+  <div class="list">
+    <div class="lhead cols-results">
+      <span></span><span>File</span><span>What happened</span>
+      <span class="num">Before</span><span class="num">After</span><span class="num">Saved</span>
+    </div>
+    @for (img of items(); track img.relativePath) {
+      <div class="row cols-results">
+        <img class="thumb" [src]="thumbUrl(img)" alt="" loading="lazy">
+        <div class="file">
+          <strong [title]="img.relativePath">{{ fileName(img.relativePath) }}</strong>
+          <span>{{ folderName(img.relativePath) }}</span>
+        </div>
+        <div>
+          <span [class]="'pill ' + pill(img).cls">{{ pill(img).text }}</span>
+          <div class="what" [class.err]="isBad(img)">{{ happened(img) }}</div>
+        </div>
+        <div class="num">{{ formatSize(before(img)) }}</div>
+        <div class="num">{{ after(img) }}</div>
+        <div class="num">{{ saved(img) }}</div>
+      </div>
+    }
+  </div>
+  <app-pager [total]="total()" [page]="page()" [pageSize]="pageSize()" (pageChange)="goImgPage($event)" />
+  } @else {
+    <div class="list">
+      <div class="lhead cols-results">
+        <span></span><span>File</span><span>What happened</span>
+        <span class="num">Before</span><span class="num">After</span><span class="num">Saved</span>
+      </div>
+      @for (d of pdfItems(); track d.relativePath) {
+        <div class="row cols-results">
+          <div class="pdficon" aria-hidden="true">PDF</div>
+          <div class="file">
+            <strong [title]="d.relativePath">{{ fileName(d.relativePath) }}</strong>
+            <span>{{ folderName(d.relativePath) }}</span>
+          </div>
+          <div>
+            <span [class]="'pill ' + pdfPill(d).cls">{{ pdfPill(d).text }}</span>
+            <div class="what" [class.err]="d.outcome?.action === 'failed' || !!d.error">{{ pdfHappened(d) }}</div>
+          </div>
+          <div class="num">{{ formatSize(pdfBefore(d)) }}</div>
+          <div class="num">{{ pdfAfter(d) }}</div>
+          <div class="num">{{ pdfSaved(d) }}</div>
+        </div>
+      }
+    </div>
+    <app-pager [total]="pdfList().length" [page]="pdfPage()" [pageSize]="pdfPageSize" (pageChange)="goPdfPage($event)" />
+  }
+}

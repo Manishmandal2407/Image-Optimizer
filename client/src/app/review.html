@@ -1,0 +1,87 @@
+@if (total() === 0) {
+  <div class="empty">
+    <svg width="64" height="64" viewBox="0 0 64 64" fill="none" stroke="#9aa3b5" stroke-width="2.5" stroke-linejoin="round" aria-hidden="true">
+      <rect x="8" y="12" width="48" height="40" rx="6"/><circle cx="22" cy="26" r="4"/><path d="M10 46l14-14 10 10 8-8 12 12"/>
+    </svg>
+    <h3>Nothing to review yet</h3>
+    <p>Scan your folder, then choose Make smaller copies.</p>
+  </div>
+} @else {
+  <app-pager [total]="total()" [page]="page()" [pageSize]="pageSize()" (pageChange)="goPage($event)" />
+
+  @for (img of items(); track img.relativePath) {
+    @if (img.smaller; as s) {
+      <article class="rcard">
+        <header class="rhead">
+          <div class="file">
+            <strong [title]="img.relativePath">{{ fileName(img.relativePath) }}</strong>
+            <span>{{ folderName(img.relativePath) }}</span>
+          </div>
+          <span [class]="'pill ' + (img.suggestion ?? 'grey')">{{ label(img) }}</span>
+          @if (img.outcome) {
+            <span [class]="'pill ' + pill(img).cls">{{ pill(img).text }}</span>
+          }
+        </header>
+
+        @if (img.outcome) {
+          <p class="rnote" [class.bad]="img.outcome.action === 'failed'">{{ statusText(img) }}</p>
+        } @else {
+          <p class="rnote">{{ reason(img) }}</p>
+        }
+
+        @if (img.outcome?.action !== 'replaced') {
+          @if (mode() === 'side') {
+            <div class="stage">
+              <figure>
+                <figcaption>Original, {{ formatSize(img.sizeBytes) }}</figcaption>
+                <img [src]="url('original', img)" alt="Original" loading="lazy">
+              </figure>
+              <figure>
+                <figcaption>Smaller copy, {{ formatSize(s.sizeBytes) }}</figcaption>
+                <img [src]="url('smaller', img)" alt="Smaller copy" loading="lazy">
+              </figure>
+            </div>
+          } @else {
+            <div class="stage one">
+              <app-compare
+                [original]="url('original', img)"
+                [smaller]="url('smaller', img)"
+                [originalLabel]="'Original, ' + formatSize(img.sizeBytes)"
+                [smallerLabel]="'Smaller, ' + formatSize(s.sizeBytes)" />
+            </div>
+          }
+        }
+
+        <div class="metrics">
+          <div class="metric"><span>Original</span><strong>{{ formatSize(originalSize(img)) }}</strong></div>
+          <div class="metric"><span>Smaller copy</span><strong>{{ formatSize(s.sizeBytes) }}</strong></div>
+          <div class="metric hl"><span>Saved</span><strong>{{ s.savingPercent }}%</strong><small>{{ formatSize(originalSize(img) - s.sizeBytes) }}</small></div>
+          <div [class]="'metric tinted ' + ssimBand(s.ssim)" title="1 means identical. The lower the score, the more the picture has changed.">
+            <span>Similarity (SSIM)</span><strong>{{ s.ssim }}</strong>
+          </div>
+        </div>
+
+
+        <div [class]="'ssim ' + ssimBand(s.ssim)">
+          <p><strong>Similarity {{ s.ssim }}:</strong> {{ ssimMeaning(s.ssim) }}</p>
+          <div class="ssim-scale" aria-hidden="true">
+            <b class="tick"></b>
+            <i [style.left.%]="ssimPosition(s.ssim)"></i>
+          </div>
+          <div class="ssim-ends"><span>0.90 or lower</span><span class="mid">0.99 and up is green</span><span>1.0 identical</span></div>
+        </div>
+
+        <div class="ractions">
+          @if (img.outcome?.action === 'replaced') {
+            <button class="btn" (click)="restore.emit(img)" [disabled]="busy()">Restore original</button>
+          } @else if (img.outcome?.action !== 'kept') {
+            <button class="btn solid" (click)="useSmaller.emit(img)" [disabled]="busy()">Use smaller version</button>
+            <button class="btn" (click)="keepOriginal.emit(img)" [disabled]="busy()">Keep original</button>
+          }
+        </div>
+      </article>
+    }
+  }
+
+  <app-pager [total]="total()" [page]="page()" [pageSize]="pageSize()" (pageChange)="goPage($event)" />
+}

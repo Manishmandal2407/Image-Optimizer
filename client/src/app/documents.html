@@ -1,0 +1,92 @@
+<section class="docs-intro">
+  <div>
+    <h2>PDFs</h2>
+    <p>Every PDF found by Scan folder is listed here. Make smaller copies shrinks the big JPEG pictures inside them, and you compare and decide in Review.</p>
+    <p class="muted">PDFs under 500 KB are skipped. Signed, password-protected or form PDFs are never changed.</p>
+  </div>
+  <button class="btn" (click)="check.emit()" [disabled]="busy() || summary().count === 0">Estimate savings</button>
+</section>
+
+@if (summary().count === 0) {
+  <div class="empty">
+    <h3>No PDFs yet</h3>
+    <p>Choose Scan folder. If there are .pdf files in your images folder, they will be listed here.</p>
+  </div>
+} @else {
+  <div class="rhero">
+    <div><span>PDFs found</span><strong>{{ summary().count }}</strong><small>{{ formatSize(summary().totalBytes) }}</small></div>
+    <div><span>Could still save</span><strong>{{ formatSize(summary().couldSave) }}</strong><small>from the smaller copies made so far</small></div>
+    <div><span>Replaced</span><strong>{{ summary().replacedCount }}</strong><small>saved {{ formatSize(summary().savedBytes) }}</small></div>
+  </div>
+
+  <p class="muted sortnote">Biggest savings first. PDFs without a smaller copy yet come last, biggest file first.</p>
+  <app-pager [total]="total()" [page]="page()" [pageSize]="pageSize()" (pageChange)="pageChange.emit($event)" />
+  <div class="list">
+    <div class="lhead cols-images">
+      <span></span><span>File</span><span class="num">Size</span><span>Status</span><span>Smaller copy</span>
+    </div>
+    @for (d of items(); track d.relativePath) {
+      <div class="row cols-images">
+        <div class="pdficon" aria-hidden="true">PDF</div>
+        <div class="file">
+          <strong [title]="d.relativePath">{{ fileName(d.relativePath) }}</strong>
+          <span>{{ folderName(d.relativePath) }}</span>
+        </div>
+        <div class="num">{{ formatSize(originalSize(d)) }}</div>
+        <div><span [class]="'pill ' + pill(d).cls">{{ pill(d).text }}</span></div>
+        <div>
+          @if (d.smaller; as x) {
+            <div class="meter"><i [style.width.%]="meterWidth(d)"></i></div>
+            <span class="meter-text">{{ formatSize(x.sizeBytes) }}, {{ x.savingPercent }}% smaller, SSIM {{ x.ssim }}</span>
+            <div class="what">{{ x.picturesShrunk }} of {{ x.picturesFound }} picture(s) shrunk.</div>
+          } @else if (d.error) {
+            <span class="err">{{ d.error }}</span>
+          } @else if (d.noCopyReason) {
+            <span class="muted">{{ d.noCopyReason }}</span>
+          } @else {
+            <span class="muted">Not made yet</span>
+            @if (d.sizeBytes >= 512000 && d.outcome?.action !== 'replaced') {
+              <div><button class="btn" (click)="prepare.emit(d.relativePath)" [disabled]="busy()">Make smaller copy</button></div>
+            }
+          }
+        </div>
+      </div>
+    }
+  </div>
+  <app-pager [total]="total()" [page]="page()" [pageSize]="pageSize()" (pageChange)="pageChange.emit($event)" />
+}
+
+@if (report(); as r) {
+  <h3 class="subhead">Estimate</h3>
+  <div class="rhero">
+    <div><span>PDFs found</span><strong>{{ r.pdfCount }}</strong><small>{{ formatSize(r.pdfBytes) }}</small></div>
+    <div><span>Checked</span><strong>{{ r.checkedCount }}</strong><small>of {{ r.eligibleCount }} that are 500 KB or more</small></div>
+    <div>
+      <span>{{ r.sampled ? 'Could save about (estimate)' : 'Could save about' }}</span>
+      <strong>{{ formatSize(r.estimatedSavingAll) }}</strong>
+      <small>{{ r.sampled ? 'from the sample, scaled up' : 'from the pictures inside' }}</small>
+    </div>
+  </div>
+  <p class="muted">
+    @if (r.sampled) {
+      Only {{ r.checkedCount }} of {{ r.eligibleCount }} PDFs were opened, so the saving is a rough guess.
+    }
+    {{ r.tooSmallCount }} PDF(s) under 500 KB ({{ formatSize(r.tooSmallBytes) }}) were not checked.
+    The check took {{ r.seconds }} second(s). The saving uses JPEG quality 85 and keeps the picture size.
+  </p>
+  <div class="list">
+    <div class="lhead cols-docs"><span>What we found</span><span class="num">PDFs</span><span class="num">Size</span><span class="num">Could save</span></div>
+    @for (g of groups; track g.key) {
+      <div class="row cols-docs">
+        <div>
+          <span [class]="'pill ' + g.pill">{{ g.label }}</span>
+          <div class="what">{{ g.note }}</div>
+        </div>
+        <div class="num">{{ r.groups[g.key].count }}</div>
+        <div class="num">{{ formatSize(r.groups[g.key].bytes) }}</div>
+        <div class="num">{{ g.key === 'worth' ? formatSize(r.groups[g.key].estimatedSaving) : '-' }}</div>
+      </div>
+    }
+  </div>
+  <p class="muted">These numbers are for the {{ r.checkedCount }} PDF(s) that were opened.</p>
+}
