@@ -113,25 +113,31 @@ export class App {
 
   goListPage(n: number) {
     this.pageWanted.list = n;
-    window.scrollTo({ top: 0 });
+    this.scrollToTop();
     void this.reload();
   }
   goReviewPage(n: number) {
     this.pageWanted.review = n;
-    window.scrollTo({ top: 0 });
+    this.scrollToTop();
     void this.reload();
   }
+  // The right-hand side scrolls on its own, so "back to the top" means that pane (the window on a narrow screen).
+  private scrollToTop() {
+    document.querySelector('main')?.scrollTo({ top: 0 });
+    window.scrollTo({ top: 0 });
+  }
+
   goDocListPage(n: number) {
     this.docListPage.set(n);
-    window.scrollTo({ top: 0 });
+    this.scrollToTop();
   }
   goDocReviewPage(n: number) {
     this.docReviewPage.set(n);
-    window.scrollTo({ top: 0 });
+    this.scrollToTop();
   }
   goResultsPage(n: number) {
     this.pageWanted.results = n;
-    window.scrollTo({ top: 0 });
+    this.scrollToTop();
     void this.reload();
   }
 

@@ -26,10 +26,24 @@ button { font-family: inherit; }
 .trail code { font: 12.5px Consolas, "Cascadia Mono", monospace; color: #d5dae5; max-width: 230px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* ---- layout ---- */
-.layout { display: grid; grid-template-columns: 340px minmax(0, 1fr); gap: 32px; max-width: 1320px; margin: 0 auto; padding: 24px; }
-@media (max-width: 960px) { .layout { grid-template-columns: 1fr; } }
-.rail { display: flex; flex-direction: column; gap: 24px; align-self: start; position: sticky; top: 16px; }
-@media (max-width: 960px) { .rail { position: static; } }
+/* The top bar stays put. The left panel and the right side each scroll on their own:
+   scroll with the mouse over the left and only the left moves; over the right and only the right moves. */
+html, body { height: 100%; overflow: hidden; }
+app-root { display: flex; flex-direction: column; height: 100vh; }
+.top { flex: none; }
+.layout { display: grid; grid-template-columns: 340px minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); gap: 24px; width: 100%; max-width: 1320px; margin: 0 auto; padding: 0 24px; flex: 1 1 auto; min-height: 0; }
+.rail { display: flex; flex-direction: column; gap: 24px; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding: 24px 0; scrollbar-width: none; -ms-overflow-style: none; }
+.rail > * { flex: none; }
+main { min-height: 0; min-width: 0; overflow-y: auto; overscroll-behavior: contain; padding: 24px 0 40px; scrollbar-width: none; -ms-overflow-style: none; }
+.rail::-webkit-scrollbar, main::-webkit-scrollbar { display: none; }
+/* On a narrow screen everything is one column and the whole page scrolls as usual. */
+@media (max-width: 960px) {
+  html, body { height: auto; overflow: auto; }
+  app-root { display: block; height: auto; }
+  .layout { display: block; padding: 24px; }
+  .rail { overflow: visible; padding: 0 0 24px; }
+  main { overflow: visible; padding: 0; }
+}
 
 /* ---- space ledger ---- */
 .ledger { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 20px; }
