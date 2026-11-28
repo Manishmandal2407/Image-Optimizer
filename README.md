@@ -1,4 +1,4 @@
-# Smart Storage Optimizer
+# Image-Optimizer
 
 A small program that runs **only on your own Windows PC**. It makes JPG and PNG
 images smaller so they take less disk space, and it does this **safely**:
