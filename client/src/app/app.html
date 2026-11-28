@@ -28,6 +28,9 @@
       <dl>
         <div><dt>Library now</dt><dd>{{ summary().count }} images, {{ formatSize(totalBytes()) }}</dd></div>
         <div><dt>PDFs</dt><dd>{{ docSummary().count }} PDFs, {{ formatSize(docSummary().totalBytes) }}</dd></div>
+        @if (dupData().searched) {
+          <div><dt>Duplicates</dt><dd>{{ dupData().totals.groups }} groups, {{ formatSize(dupData().totals.reclaimBytes) }}</dd></div>
+        }
         <div><dt>Replaced so far</dt><dd>{{ replacedCount() }}</dd></div>
         <div><dt>Could still save</dt><dd>{{ formatSize(couldSave()) }}</dd></div>
       </dl>
@@ -38,7 +41,7 @@
         <span class="n">1</span>
         <div>
           <h3>Scan folder</h3>
-          <p>Finds your JPG and PNG images and your PDFs. Nothing is changed.</p>
+          <p>Finds your JPG and PNG images and your PDFs, and looks for duplicates. Nothing is changed.</p>
           <button class="btn solid" (click)="scan()" [disabled]="busy()">Scan folder</button>
         </div>
       </li>
@@ -100,6 +103,7 @@
       <button [class.active]="view() === 'list'" (click)="show('list')">Images <span class="count">{{ summary().count }}</span></button>
       <button [class.active]="view() === 'review'" (click)="show('review')">Review <span class="count">{{ readyCount() }}</span></button>
       <button [class.active]="view() === 'documents'" (click)="show('documents')">Documents <span class="count">{{ docSummary().count }}</span></button>
+      <button [class.active]="view() === 'duplicates'" (click)="show('duplicates')">Duplicates <span class="count">{{ dupData().totals.groups }}</span></button>
       <button [class.active]="view() === 'results'" (click)="show('results')">Results</button>
     </nav>
 
@@ -204,6 +208,13 @@
         [items]="docListData().items" [total]="docListData().total" [page]="docListData().page" [pageSize]="docListPageSize"
         [summary]="docSummary()" [report]="pdfReport()" [busy]="busy()"
         (check)="checkPdfs()" (prepare)="makePdfSmaller($event)" (pageChange)="goDocListPage($event)" />
+    } @else if (view() === 'duplicates') {
+      <app-duplicates
+        [data]="dupData()" [removed]="dupRemoved()" [kind]="dupKind()" [busy]="busy()"
+        [pageSize]="dupPageSize" [removedPageSize]="dupRemovedPageSize"
+        (find)="findDuplicates($event)" (remove)="removeDuplicates($event)" (removeExact)="removeIdenticalDuplicates()"
+        (restore)="restoreDuplicate($event)" (kindChange)="setDupKind($event)"
+        (pageChange)="goDupPage($event)" (removedPageChange)="goDupRemovedPage($event)" />
     } @else if (view() === 'results') {
       <app-results [items]="resultsData().items" [total]="resultsData().total" [page]="resultsData().page" [pageSize]="resultsPageSize"
         [summary]="summary()" [docs]="pdfDocs()" (pageChange)="goResultsPage($event)" />

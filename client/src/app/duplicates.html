@@ -1,0 +1,168 @@
+<section class="docs-intro">
+  <div>
+    <h2>Duplicates</h2>
+    <p>Finds files that are exactly the same, and pictures that look the same (copies, resized or saved again). You choose which one to keep.</p>
+    <p class="muted">Nothing is deleted. The extra files are moved to your vault, and you can put them back any time.</p>
+  </div>
+  <div class="dupctl">
+    <div class="toggle" role="group" aria-label="How strict the matching is">
+      @for (l of levels; track l.key) {
+        <button type="button" [class.active]="sensitivity() === l.key" [title]="l.note" (click)="sensitivity.set(l.key)">{{ l.label }}</button>
+      }
+    </div>
+    <button class="btn solid" (click)="find.emit(sensitivity())" [disabled]="busy()">Find duplicates</button>
+  </div>
+</section>
+
+@if (!data().searched) {
+  <div class="empty">
+    <h3>No search yet</h3>
+    <p>Choose Find duplicates. It reads your images and PDFs and changes nothing.</p>
+  </div>
+} @else {
+  <div class="rhero">
+    <div><span>Groups found</span><strong>{{ data().totals.groups }}</strong><small>{{ data().totals.extraFiles }} extra file(s), of {{ data().filesLooked }} checked</small></div>
+    <div><span>Could free</span><strong>{{ formatSize(data().totals.reclaimBytes) }}</strong><small>if you keep one file in every group</small></div>
+    <div><span>Moved to the vault</span><strong>{{ data().removedCount }}</strong><small>file(s) so far</small></div>
+  </div>
+
+  @if (data().totals.groups === 0) {
+    <div class="empty">
+      <h3>No duplicates found</h3>
+      <p>Every file looks different. Try Loose matching if you expected more.</p>
+    </div>
+  } @else {
+    <div class="dupbar">
+      <div class="toggle" role="group" aria-label="Which groups to show">
+        <button type="button" [class.active]="kind() === 'all'" (click)="kindChange.emit('all')">All <span class="cnt">{{ data().totals.groups }}</span></button>
+        <button type="button" [class.active]="kind() === 'exact'" (click)="kindChange.emit('exact')">Identical <span class="cnt">{{ data().totals.exactGroups }}</span></button>
+        <button type="button" [class.active]="kind() === 'similar'" (click)="kindChange.emit('similar')">Similar <span class="cnt">{{ data().totals.similarGroups }}</span></button>
+      </div>
+      <button class="btn save" (click)="confirmOpen.set(true)" [disabled]="busy() || data().totals.exactGroups === 0">
+        Move all identical copies ({{ formatSize(data().totals.exactReclaimBytes) }})
+      </button>
+    </div>
+    <p class="muted sortnote">Biggest savings first. Identical files are exact copies. Similar pictures only look alike, so check them before you choose.</p>
+
+    <app-pager [total]="data().total" [page]="data().page" [pageSize]="pageSize()" (pageChange)="pageChange.emit($event)" />
+    @for (g of data().items; track g.id) {
+      <article class="dgroup">
+        <header>
+          <span [class]="'pill ' + (g.kind === 'exact' ? 'green' : 'amber')">{{ g.kind === 'exact' ? 'Identical copies' : 'Similar pictures' }}</span>
+          <span class="muted">{{ g.files.length }} files, frees {{ formatSize(reclaim(g)) }}</span>
+        </header>
+        <div class="dfiles">
+          @for (f of g.files; track f.relativePath; let i = $index) {
+            <label class="dfile" [class.keep]="chosen(g) === f.relativePath">
+              @if (f.type === 'image') {
+                <img class="zoomable" [src]="thumb(f.relativePath)" alt="" loading="lazy" title="Click to enlarge"
+                     (click)="$event.preventDefault(); $event.stopPropagation(); openPreview(g, i)">
+              } @else {
+                <div class="pdfbig zoomable" title="Click to open" (click)="$event.preventDefault(); $event.stopPropagation(); openPreview(g, i)">PDF</div>
+              }
+              <span class="dpick">
+                <input type="radio" [name]="g.id" [checked]="chosen(g) === f.relativePath" (change)="choose(g, f.relativePath)">
+                {{ chosen(g) === f.relativePath ? 'Keep this one' : 'Move to vault' }}
+              </span>
+              <strong [title]="f.relativePath">{{ fileName(f.relativePath) }}</strong>
+              <span class="dmeta" [title]="f.relativePath">{{ folderName(f.relativePath) || 'Main folder' }}</span>
+              <span class="dmeta">{{ meta(f) }}</span>
+              <span class="dmeta">Modified {{ date(f.mtimeMs) }}</span>
+              <span class="dtags">
+                @if (g.keep === f.relativePath) { <i class="tag">Suggested</i> }
+                @if (f.twin) { <i class="tag same">Same as copy {{ copyLetter(f.twin) }}</i> }
+                <a [href]="open(f.relativePath)" target="_blank" rel="noopener" (click)="$event.stopPropagation()">Open</a>
+              </span>
+            </label>
+          }
+        </div>
+        <footer>
+          <button class="btn save" (click)="remove.emit({ groupId: g.id, keep: chosen(g) })" [disabled]="busy()">
+            Keep the chosen file, move {{ g.files.length - 1 }} to the vault
+          </button>
+        </footer>
+      </article>
+    }
+    <app-pager [total]="data().total" [page]="data().page" [pageSize]="pageSize()" (pageChange)="pageChange.emit($event)" />
+  }
+
+  @if (removed().total > 0) {
+    <h3 class="subhead">Moved to the vault</h3>
+    <div class="list">
+      <div class="lhead cols-removed"><span>File</span><span>Kept instead</span><span class="num">Size</span><span></span></div>
+      @for (r of removed().items; track r.id) {
+        <div class="row cols-removed">
+          <div class="file">
+            <strong [title]="r.relativePath">{{ fileName(r.relativePath) }}</strong>
+            <span>{{ folderName(r.relativePath) || 'Main folder' }} &middot; {{ when(r.at) }}</span>
+          </div>
+          <div class="file"><strong [title]="r.keptPath">{{ fileName(r.keptPath) }}</strong><span>{{ folderName(r.keptPath) || 'Main folder' }}</span></div>
+          <div class="num">{{ formatSize(r.sizeBytes) }}</div>
+          <div class="num">
+            @if (r.restoredAt) {
+              <span class="pill grey">Restored</span>
+            } @else {
+              <button class="btn" (click)="restore.emit(r.id)" [disabled]="busy()">Restore</button>
+            }
+          </div>
+        </div>
+      }
+    </div>
+    <app-pager [total]="removed().total" [page]="removed().page" [pageSize]="removedPageSize()" (pageChange)="removedPageChange.emit($event)" />
+  }
+}
+
+@if (confirmOpen()) {
+  <div class="scrim" (click)="confirmOpen.set(false)">
+    <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dup-confirm-title" (click)="$event.stopPropagation()">
+      <h2 id="dup-confirm-title">Move identical copies to the vault?</h2>
+      <p>
+        In {{ data().totals.exactGroups }} group(s) of exact copies, the suggested file stays and the others move to your vault.
+        Every copy is checked byte by byte first, and you can restore any of them later. Similar pictures are not touched.
+      </p>
+      <div class="acts">
+        <button class="btn" (click)="confirmOpen.set(false)">Cancel</button>
+        <button class="btn save" (click)="confirmOpen.set(false); removeExact.emit()">Move {{ formatSize(data().totals.exactReclaimBytes) }}</button>
+      </div>
+    </div>
+  </div>
+}
+
+@if (preview() && current(); as f) {
+  <div class="scrim lightbox-scrim" (click)="closePreview()">
+    <div class="lightbox" role="dialog" aria-modal="true" aria-label="Preview" (click)="$event.stopPropagation()">
+      <header>
+        <div class="lb-title">
+          <strong [title]="f.relativePath">{{ f.relativePath }}</strong>
+          <span>{{ meta(f) }} &middot; Modified {{ date(f.mtimeMs) }} &middot; {{ preview()!.index + 1 }} of {{ preview()!.group.files.length }}</span>
+        </div>
+        <span class="lb-keep">
+          @if (preview()!.group.keep === f.relativePath) { <i class="tag">Suggested</i> }
+          @if (chosen(preview()!.group) === f.relativePath) { <i class="tag">Keeping this one</i> }
+        </span>
+        <a [href]="open(f.relativePath)" target="_blank" rel="noopener">Open in new tab</a>
+        <button class="btn" (click)="closePreview()" aria-label="Close preview">Close</button>
+      </header>
+      <div class="lb-stage">
+        @if (preview()!.group.files.length > 1) {
+          <button class="lb-nav prev" (click)="step(-1)" aria-label="Previous file">&#8249;</button>
+        }
+        @if (f.type === 'image') {
+          <img [src]="open(f.relativePath)" [alt]="f.relativePath">
+        } @else {
+          <iframe [src]="frame(f.relativePath)" title="PDF preview"></iframe>
+        }
+        @if (preview()!.group.files.length > 1) {
+          <button class="lb-nav next" (click)="step(1)" aria-label="Next file">&#8250;</button>
+        }
+      </div>
+      <footer>
+        <label class="lb-choose">
+          <input type="radio" [name]="'lb-' + preview()!.group.id" [checked]="chosen(preview()!.group) === f.relativePath" (change)="choose(preview()!.group, f.relativePath)">
+          Keep this one (the others in this group move to the vault)
+        </label>
+        <span class="muted">Use the arrow keys to switch files, Esc to close.</span>
+      </footer>
+    </div>
+  </div>
+}

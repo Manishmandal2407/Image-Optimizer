@@ -1,12 +1,13 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
-import { EMPTY_PAGE, EMPTY_SUMMARY, ImageRecord, ListPage, PdfDoc, PdfPrepareResult, PdfReport, Summary, fileName, folderName, formatSize, originalSize, pageSlice, pdfBiggestSavingFirst, statusPill, summarizeDocs, thumbUrl } from './models';
+import { DupKind, DupPage, DupRemovedPage, DupSensitivity, EMPTY_DUP_PAGE, EMPTY_DUP_REMOVED, EMPTY_PAGE, EMPTY_SUMMARY, ImageRecord, ListPage, PdfDoc, PdfPrepareResult, PdfReport, Summary, fileName, folderName, formatSize, originalSize, pageSlice, pdfBiggestSavingFirst, statusPill, summarizeDocs, thumbUrl } from './models';
 import { Review } from './review';
 import { Results } from './results';
 import { Documents } from './documents';
 import { PdfReview } from './pdf-review';
 import { Pager } from './pager';
+import { Duplicates } from './duplicates';
 
 // How many rows the Images list shows on one page.
 const LIST_PAGE_SIZE = 50;
@@ -14,6 +15,8 @@ const REVIEW_PAGE_SIZE = 10; // each review card loads two full pictures
 const RESULTS_PAGE_SIZE = 50;
 const DOC_LIST_PAGE_SIZE = 50;
 const DOC_REVIEW_PAGE_SIZE = 3; // each PDF card loads two PDF viewers
+const DUP_PAGE_SIZE = 10; // groups per page
+const DUP_REMOVED_PAGE_SIZE = 20;
 
 // The shape of the data the server sends us.
 interface Folders { imagesFolder: string; vaultFolder: string; workFolder: string }
@@ -28,7 +31,7 @@ interface PrepareResponse {
 }
 
 @Component({
-  imports: [Review, PdfReview, Results, Pager, Documents],
+  imports: [Review, PdfReview, Results, Pager, Documents, Duplicates],
   selector: 'app-root',
   styleUrl: './app.css',
   templateUrl: './app.html',
@@ -45,7 +48,14 @@ export class App {
   resultsData = signal<ListPage>(EMPTY_PAGE);
   rangeCount = signal(0); // how many images "Replace by saving" would replace now
   folders = signal<Folders | null>(null);
-  view = signal<'list' | 'review' | 'documents' | 'results'>('list'); // which tab is showing
+  view = signal<'list' | 'review' | 'documents' | 'duplicates' | 'results'>('list'); // which tab is showing
+  dupData = signal<DupPage>(EMPTY_DUP_PAGE); // one page of duplicate groups, plus the totals
+  dupRemoved = signal<DupRemovedPage>(EMPTY_DUP_REMOVED); // files moved to the vault
+  dupKind = signal<DupKind>('all');
+  dupPageSize = DUP_PAGE_SIZE;
+  dupRemovedPageSize = DUP_REMOVED_PAGE_SIZE;
+  private dupPageWanted = 1;
+  private dupRemovedPageWanted = 1;
   pdfReport = signal<PdfReport | null>(null); // the answer of the PDF check
   pdfResults = signal<Record<string, PdfPrepareResult>>({}); // smaller PDF copies made so far, by file
   pdfDocs = signal<Record<string, PdfDoc>>({}); // what the server remembers about each PDF, by file
@@ -103,7 +113,7 @@ export class App {
   private range = { from: 15, to: 20 };
 
   // Switch tab and fetch what that tab shows.
-  show(view: 'list' | 'review' | 'documents' | 'results') {
+  show(view: 'list' | 'review' | 'documents' | 'duplicates' | 'results') {
     this.view.set(view);
     if (view === 'review' && this.summary().readyCount === 0 && this.docSummary().readyCount > 0) {
       this.reviewKind.set('pdfs');
@@ -139,6 +149,75 @@ export class App {
     this.pageWanted.results = n;
     this.scrollToTop();
     void this.reload();
+  }
+
+  // ---- Duplicates ----
+
+  // The groups on this page (the totals also feed the tab badge and the left side).
+  private async loadDuplicates() {
+    try {
+      const d = await firstValueFrom(this.http.get<DupPage>(`/api/duplicates?kind=${this.dupKind()}&page=${this.dupPageWanted}&size=${DUP_PAGE_SIZE}`));
+      this.dupPageWanted = d.page;
+      this.dupData.set(d);
+      if (this.view() === 'duplicates') {
+        const r = await firstValueFrom(this.http.get<DupRemovedPage>(`/api/duplicates/removed?page=${this.dupRemovedPageWanted}&size=${DUP_REMOVED_PAGE_SIZE}`));
+        this.dupRemovedPageWanted = r.page;
+        this.dupRemoved.set(r);
+      }
+    } catch {
+      // If the server is down, the next button click will explain it.
+    }
+  }
+  setDupKind(k: DupKind) {
+    this.dupKind.set(k);
+    this.dupPageWanted = 1;
+    void this.loadDuplicates();
+  }
+  goDupPage(n: number) {
+    this.dupPageWanted = n;
+    this.scrollToTop();
+    void this.loadDuplicates();
+  }
+  goDupRemovedPage(n: number) {
+    this.dupRemovedPageWanted = n;
+    void this.loadDuplicates();
+  }
+
+  async findDuplicates(sensitivity: DupSensitivity) {
+    this.start('Looking for duplicates. This reads your files and can take a few minutes.');
+    try {
+      const r = await firstValueFrom(this.http.post<{ message: string }>('/api/duplicates/find', { sensitivity }));
+      this.dupPageWanted = 1;
+      await this.loadDuplicates();
+      this.infoMessage.set(r.message);
+    } catch (err) {
+      this.errorMessage.set(this.explain(err));
+    }
+    this.busy.set(false);
+  }
+
+  async removeDuplicates(r: { groupId: string; keep: string }) {
+    await this.dupAction('/api/duplicates/remove', r, 'Moving the extra files to the vault. Each one is checked first.');
+  }
+  async removeIdenticalDuplicates() {
+    await this.dupAction('/api/duplicates/remove-exact', {}, 'Moving identical copies to the vault, one group at a time.');
+  }
+  async restoreDuplicate(id: string) {
+    await this.dupAction('/api/duplicates/restore', { id }, 'Putting the file back from the vault...');
+  }
+
+  // Send a Duplicates click to the server, then show the new state. Files may have changed even on an error.
+  private async dupAction(url: string, body: object, busyText: string) {
+    this.start(busyText);
+    try {
+      const r = await firstValueFrom(this.http.post<{ message: string }>(url, body));
+      await this.reload();
+      this.infoMessage.set(r.message);
+    } catch (err) {
+      await this.reload();
+      this.errorMessage.set(this.explain(err));
+    }
+    this.busy.set(false);
   }
 
   setFrom(event: Event) {
@@ -183,6 +262,7 @@ export class App {
         else this.resultsData.set(p);
       }
       if (v === 'review') await this.loadRangeCount();
+      await this.loadDuplicates();
     } catch {
       // If the server is down, the next button click will explain it.
     }
@@ -257,6 +337,19 @@ export class App {
       let text = `Scan finished: ${result.count} images and ${result.pdfCount} PDFs found.`;
       if (result.warnings.length > 0) {
         text += ` ${result.warnings.length} warning(s): see data/app.log.`;
+      }
+      // The same click also looks for duplicates (read-only), with the matching strictness you used last.
+      if (result.count + result.pdfCount > 0) {
+        this.busyText.set('Looking for duplicates...');
+        try {
+          const d = await firstValueFrom(
+            this.http.post<{ stopped: boolean; message: string }>('/api/duplicates/find', { sensitivity: this.dupData().sensitivity }),
+          );
+          await this.loadDuplicates();
+          text += ` ${d.message}`;
+        } catch (err) {
+          text += ` The duplicate search did not finish: ${this.explain(err)}`;
+        }
       }
       this.infoMessage.set(text);
     } catch (err) {

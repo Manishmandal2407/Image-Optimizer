@@ -275,3 +275,71 @@ export function pageSlice<T>(list: T[], page: number, size: number): { items: T[
   const now = Math.min(Math.max(1, page), pages);
   return { items: list.slice((now - 1) * size, now * size), page: now, total: list.length };
 }
+
+// ---- Duplicates (see src/duplicates.ts) ----
+
+export type DupSensitivity = 'strict' | 'normal' | 'loose';
+export type DupKind = 'all' | 'exact' | 'similar';
+
+export interface DupFile {
+  relativePath: string;
+  sizeBytes: number;
+  mtimeMs: number;
+  type: 'image' | 'pdf';
+  width?: number;
+  height?: number;
+  twin?: number; // inside a "similar" group: same number = byte for byte identical
+}
+
+export interface DupGroup {
+  id: string;
+  kind: 'exact' | 'similar';
+  files: DupFile[];
+  keep: string; // our suggestion
+  reclaimBytes: number;
+}
+
+export interface DupTotals {
+  groups: number;
+  exactGroups: number;
+  similarGroups: number;
+  extraFiles: number;
+  reclaimBytes: number;
+  exactReclaimBytes: number;
+}
+
+export interface DupPage {
+  searched: boolean;
+  foundAt: string | null;
+  sensitivity: DupSensitivity;
+  filesLooked: number;
+  totals: DupTotals;
+  removedCount: number;
+  total: number;
+  page: number;
+  items: DupGroup[];
+}
+
+export interface DupRemoved {
+  id: string;
+  at: string;
+  relativePath: string;
+  vaultRelative: string;
+  sizeBytes: number;
+  keptPath: string;
+  kind: 'exact' | 'similar';
+  restoredAt?: string;
+}
+
+export interface DupRemovedPage {
+  total: number;
+  page: number;
+  items: DupRemoved[];
+}
+
+export const EMPTY_DUP_TOTALS: DupTotals = { groups: 0, exactGroups: 0, similarGroups: 0, extraFiles: 0, reclaimBytes: 0, exactReclaimBytes: 0 };
+export const EMPTY_DUP_PAGE: DupPage = {
+  searched: false, foundAt: null, sensitivity: 'normal', filesLooked: 0,
+  totals: EMPTY_DUP_TOTALS, removedCount: 0, total: 0, page: 1, items: [],
+};
+export const EMPTY_DUP_REMOVED: DupRemovedPage = { total: 0, page: 1, items: [] };

@@ -475,3 +475,102 @@
 2026-11-26T11:12:21.717Z  Making smaller copies finished: {"made":0,"alreadyDone":18,"tooSmall":73,"failed":0,"pdfMade":0,"pdfAlreadyDone":1,"pdfTooSmall":1,"pdfNoCopy":2,"pdfFailed":0}
 2026-11-26T11:12:28.266Z  Restore original started: xray.jpg
 2026-11-26T11:12:28.301Z  Restore original finished: xray.jpg: Original restored from the vault and checked.
+2026-11-26T11:23:49.285Z  Server started at http://localhost:4000
+2026-11-26T11:23:49.287Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-26T11:24:54.345Z  Server started at http://localhost:4000
+2026-11-26T11:24:54.347Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-26T11:32:45.469Z  Server started at http://localhost:4000
+2026-11-26T11:32:45.471Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-26T11:34:47.822Z  Server started at http://localhost:4000
+2026-11-26T11:34:47.826Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-26T11:47:22.230Z  Bulk PDF replace started: 1 PDFs
+2026-11-26T11:47:22.231Z  Use smaller PDF started: 2.2 Accessibility Workshop - Image Examples in PDF.pdf
+2026-11-26T11:47:22.294Z    vault already has an identical copy, reusing it
+2026-11-26T11:47:22.295Z    a) original PDF is safe in the vault and checked
+2026-11-26T11:47:22.304Z    b,c) smaller PDF swapped in under the same name
+2026-11-26T11:47:22.320Z    d) new PDF checked: it opens and matches
+2026-11-26T11:47:22.323Z  Use smaller PDF finished: 2.2 Accessibility Workshop - Image Examples in PDF.pdf: Replaced with the smaller version. Saved 294 KB. Original is in the vault.
+2026-11-26T11:47:22.324Z  Bulk PDF replace finished: Replaced 1 of 1 PDFs. Saved 294 KB. 
+2026-11-26T12:01:15.984Z  Scan started
+2026-11-26T12:01:15.996Z  Scan finished: 91 images, 35379073 bytes, 4 PDFs, 6899386 bytes, 0 warnings, 0 s
+2026-11-26T12:19:23.906Z  Server started at http://localhost:4000
+2026-11-26T12:19:23.915Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-26T12:21:38.118Z  Server started at http://localhost:4000
+2026-11-26T12:21:38.122Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-26T12:27:16.586Z  STARTUP FAILED: Another copy of Smart Storage Optimizer is already running on port 4000. Close its window (or press Ctrl+C there), then start this one again.
+2026-11-26T12:29:03.845Z  Server started at http://localhost:4000
+2026-11-26T12:29:03.849Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-26T12:29:08.498Z  Duplicate search started: 93 images, 4 PDFs, 6 files share a size with another
+2026-11-26T12:29:12.041Z  Duplicate search finished: 5 groups (2 identical, 3 similar)
+2026-11-27T04:37:53.052Z  STARTUP FAILED: Another copy of Smart Storage Optimizer is already running on port 4000. Close its window (or press Ctrl+C there), then start this one again.
+2026-11-27T04:38:58.994Z  STARTUP FAILED: Another copy of Smart Storage Optimizer is already running on port 4000. Close its window (or press Ctrl+C there), then start this one again.
+2026-11-27T04:40:25.559Z  Server started at http://localhost:4000
+2026-11-27T04:40:25.561Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-27T04:40:35.572Z  Scan started
+2026-11-27T04:40:35.580Z  Scan finished: 99 images, 61497753 bytes, 4 PDFs, 6899386 bytes, 0 warnings, 0 s
+2026-11-27T04:40:38.221Z  Scan started
+2026-11-27T04:40:38.232Z  Scan finished: 99 images, 61497753 bytes, 4 PDFs, 6899386 bytes, 0 warnings, 0 s
+2026-11-27T04:40:39.090Z  Scan started
+2026-11-27T04:40:39.098Z  Scan finished: 99 images, 61497753 bytes, 4 PDFs, 6899386 bytes, 0 warnings, 0 s
+2026-11-27T04:48:58.321Z  Server started at http://localhost:4000
+2026-11-27T04:48:58.323Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-27T04:50:29.717Z  Scan started
+2026-11-27T04:50:29.728Z  Scan finished: 99 images, 61497753 bytes, 4 PDFs, 6899386 bytes, 0 warnings, 0 s
+2026-11-27T04:50:34.334Z  Duplicate search started: 99 images, 4 PDFs, 12 files share a size with another
+2026-11-27T04:50:35.954Z  Duplicate search finished: 6 groups (5 identical, 1 similar)
+2026-11-27T04:52:35.082Z  Duplicate search started: 99 images, 4 PDFs, 12 files share a size with another
+2026-11-27T04:52:35.091Z  Duplicate search finished: 6 groups (5 identical, 1 similar)
+2026-11-27T05:06:37.439Z  Server started at http://localhost:4000
+2026-11-27T05:06:37.441Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-27T05:08:16.951Z  Scan started
+2026-11-27T05:08:16.969Z  Scan finished: 99 images, 61497753 bytes, 4 PDFs, 6899386 bytes, 0 warnings, 0 s
+2026-11-27T05:08:17.038Z  Duplicate search started: 99 images, 4 PDFs, 12 files share a size with another
+2026-11-27T05:08:17.063Z  Duplicate search finished: 6 groups (5 identical, 1 similar)
+2026-11-27T05:39:59.951Z  Server started at http://localhost:4000
+2026-11-27T05:39:59.953Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-27T05:50:47.040Z  Scan started
+2026-11-27T05:50:47.052Z  Scan finished: 107 images, 63875278 bytes, 4 PDFs, 6899386 bytes, 0 warnings, 0 s
+2026-11-27T05:50:47.105Z  Duplicate search started: 107 images, 4 PDFs, 24 files share a size with another
+2026-11-27T05:50:47.229Z  Duplicate search finished: 12 groups (11 identical, 1 similar)
+2026-11-27T05:57:20.650Z  Scan started
+2026-11-27T05:57:20.665Z  Scan finished: 109 images, 64334494 bytes, 4 PDFs, 6899386 bytes, 0 warnings, 0 s
+2026-11-27T05:57:20.706Z  Duplicate search started: 109 images, 4 PDFs, 24 files share a size with another
+2026-11-27T05:57:20.758Z  Duplicate search finished: 12 groups (11 identical, 1 similar)
+2026-11-27T06:14:51.862Z  Making smaller copies started (109 images and 4 PDFs in list)
+2026-11-27T06:14:51.868Z  Making smaller copy: 2 B Prescription_Report_of_Sunita_Sharma.jpg
+2026-11-27T06:14:55.905Z    smaller copy written, now comparing: 2 B Prescription_Report_of_Sunita_Sharma.jpg
+2026-11-27T06:14:59.769Z    comparison done: SSIM 0.9938173086240297
+2026-11-27T06:14:59.772Z  Done: 2 B Prescription_Report_of_Sunita_Sharma.jpg -> 1421864 bytes, saving 68.6%, SSIM 0.9938
+2026-11-27T06:14:59.775Z  Making smaller copy: 2 B Prescription_Report_of_Sunita_Sharma1.jpg
+2026-11-27T06:15:03.787Z    smaller copy written, now comparing: 2 B Prescription_Report_of_Sunita_Sharma1.jpg
+2026-11-27T06:15:07.257Z    comparison done: SSIM 0.9938173086240297
+2026-11-27T06:15:07.259Z  Done: 2 B Prescription_Report_of_Sunita_Sharma1.jpg -> 1421864 bytes, saving 68.6%, SSIM 0.9938
+2026-11-27T06:15:07.262Z  Making smaller copy: 1 A Prescription_Report_of_Sunita_Sharma.jpg
+2026-11-27T06:15:11.215Z    smaller copy written, now comparing: 1 A Prescription_Report_of_Sunita_Sharma.jpg
+2026-11-27T06:15:14.420Z    comparison done: SSIM 0.9938911847173983
+2026-11-27T06:15:14.424Z  Done: 1 A Prescription_Report_of_Sunita_Sharma.jpg -> 1389520 bytes, saving 68.9%, SSIM 0.9939
+2026-11-27T06:15:14.426Z  Making smaller copy: 1 A Prescription_Report_of_Sunita_Sharma1.jpg
+2026-11-27T06:15:18.455Z    smaller copy written, now comparing: 1 A Prescription_Report_of_Sunita_Sharma1.jpg
+2026-11-27T06:15:19.650Z    comparison done: SSIM 0.9938911847173983
+2026-11-27T06:15:19.651Z  Done: 1 A Prescription_Report_of_Sunita_Sharma1.jpg -> 1389520 bytes, saving 68.9%, SSIM 0.9939
+2026-11-27T06:15:19.652Z  Making smaller copy: 3 A Patient details_Report_of_Sunita_Sharma.jpg
+2026-11-27T06:15:20.943Z    smaller copy written, now comparing: 3 A Patient details_Report_of_Sunita_Sharma.jpg
+2026-11-27T06:15:22.777Z    comparison done: SSIM 0.9936382895306165
+2026-11-27T06:15:22.780Z  Done: 3 A Patient details_Report_of_Sunita_Sharma.jpg -> 1137357 bytes, saving 71.8%, SSIM 0.9936
+2026-11-27T06:15:22.783Z  Making smaller copy: 3 A Patient details_Report_of_Sunita_Sharma1.jpg
+2026-11-27T06:15:26.021Z    smaller copy written, now comparing: 3 A Patient details_Report_of_Sunita_Sharma1.jpg
+2026-11-27T06:15:28.982Z    comparison done: SSIM 0.9936382895306165
+2026-11-27T06:15:28.984Z  Done: 3 A Patient details_Report_of_Sunita_Sharma1.jpg -> 1137357 bytes, saving 71.8%, SSIM 0.9936
+2026-11-27T06:15:28.987Z  Making smaller copy: xray2.jpg
+2026-11-27T06:15:29.470Z    smaller copy written, now comparing: xray2.jpg
+2026-11-27T06:15:31.732Z    comparison done: SSIM 0.9774944690567092
+2026-11-27T06:15:31.735Z  Done: xray2.jpg -> 143732 bytes, saving 80%, SSIM 0.9775
+2026-11-27T06:15:31.744Z  Making smaller copies finished: {"made":7,"alreadyDone":18,"tooSmall":84,"failed":0,"pdfMade":0,"pdfAlreadyDone":1,"pdfTooSmall":1,"pdfNoCopy":2,"pdfFailed":0}
+2026-11-27T07:05:04.197Z  Scan started
+2026-11-27T07:05:04.223Z  Scan finished: 109 images, 64334494 bytes, 4 PDFs, 6899386 bytes, 0 warnings, 0 s
+2026-11-27T07:05:04.302Z  Duplicate search started: 109 images, 4 PDFs, 24 files share a size with another
+2026-11-27T07:05:04.327Z  Duplicate search finished: 12 groups (11 identical, 1 similar)
+2026-11-27T10:24:17.854Z  Server started at http://localhost:4000
+2026-11-27T10:24:17.860Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work
+2026-11-28T05:13:25.851Z  Server started at http://localhost:4000
+2026-11-28T05:13:25.860Z  Images: C:/SSO-test/images | Vault: C:/SSO-test/vault | Work: C:/SSO-test/work

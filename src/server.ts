@@ -8,6 +8,7 @@ import { ListView, pageOf, rangeCount, summarize } from "./listing";
 import { makeSmallerCopy } from "./optimizer";
 import { safeJoin } from "./paths";
 import fs from "fs";
+import os from "os";
 import sharp from "sharp";
 import { ImageRecord, Outcome, suggestFor } from "./state";
 import { useSmallerVersion, restoreOriginal } from "./replacer";
@@ -17,6 +18,7 @@ import { makeSmallerPdf } from "./pdfOptimizer";
 import { useSmallerPdf, restorePdf } from "./pdfReplacer";
 import { sha256 } from "./replacer";
 import { DocRecord } from "./state";
+import { DupGroup, Sensitivity, findDuplicates, loadDupStore, removeExtras, restoreRemoved, saveDupStore } from "./duplicates";
 
 const PORT = 4000;
 const MIN_SIZE_BYTES = 500 * 1024; // only images of 500 KB or more get a smaller copy
@@ -155,6 +157,28 @@ async function makePdfCopy(rec: DocRecord, original: string, smaller: string) {
   return r;
 }
 
+// How many files "Make smaller copies" works on at once. About half the processor cores, from 1 to 3
+// (more would use a lot of memory on big photos). Set SSO_PARALLEL=1 to go back to one at a time.
+const PREPARE_PARALLEL = (() => {
+  const wanted = Number(process.env.SSO_PARALLEL);
+  if (Number.isInteger(wanted) && wanted >= 1) return Math.min(wanted, 6);
+  return Math.max(1, Math.min(3, Math.floor(os.cpus().length / 2)));
+})();
+
+// Run "fn" over the items, a few at a time. Returns true if you clicked Stop before every item was started.
+async function runPool<T>(items: T[], parallel: number, fn: (item: T) => Promise<void>): Promise<boolean> {
+  let next = 0;
+  let stopped = false;
+  const worker = async () => {
+    while (next < items.length) {
+      if (job.stop) { stopped = true; return; }
+      await fn(items[next++]);
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(parallel, items.length) }, worker));
+  return stopped;
+}
+
 app.post("/api/prepare", async (_req, res) => {
   if (working) {
     res.status(409).json({ error: "Already working. Please wait for the current run to finish." });
@@ -173,65 +197,70 @@ app.post("/api/prepare", async (_req, res) => {
   startJob("Making smaller copies", state.images.length + state.documents.length);
   try {
     log(`Making smaller copies started (${state.images.length} images and ${state.documents.length} PDFs in list)`);
-    for (const img of state.images) {
-      if (job.stop) { stopped = true; break; } // you clicked Stop
-      job.done++;
-      if (img.outcome?.action === "replaced") { counts.alreadyDone++; continue; }
-      if (img.sizeBytes < MIN_SIZE_BYTES) { counts.tooSmall++; continue; }
-
-      const originalFile = safeJoin(config.imagesFolder, img.relativePath);
-      const smallerFile = safeJoin(config.workFolder, img.relativePath);
-
-      // Already done earlier and the copy is still there: skip it.
-      if (img.smaller && fs.existsSync(smallerFile)) { counts.alreadyDone++; continue; }
-
-      try {
-        // The file must still be the same one we scanned.
-        if (!fs.existsSync(originalFile) || fs.statSync(originalFile).size !== img.sizeBytes) {
-          throw new Error("The file changed or disappeared since the scan. Please run Scan again.");
-        }
-        log(`Making smaller copy: ${img.relativePath}`);
-        const r = await makeSmallerCopy(originalFile, smallerFile);
-        img.smaller = {
-          sizeBytes: r.sizeBytes,
-          savingPercent: Math.round((1 - r.sizeBytes / img.sizeBytes) * 1000) / 10,
-          ssim: r.ssim,
-        };
-        delete img.error;
-        counts.made++;
-        log(`Done: ${img.relativePath} -> ${r.sizeBytes} bytes, saving ${img.smaller.savingPercent}%, SSIM ${r.ssim}`);
-      } catch (err) {
-        const message = err instanceof Error ? err.message : String(err);
-        // Remove a half-written temporary copy (it is OUR file in workFolder).
-        if (fs.existsSync(smallerFile)) fs.rmSync(smallerFile);
-        delete img.smaller;
-        img.error = message;
-        counts.failed++;
-        log(`FAILED: ${img.relativePath}: ${message}`);
-      }
-      // Saving the whole list is slow when it is long, so save every 10 images.
+    // Several files are worked on at the same time (the slow part is compressing and comparing).
+    // Each file is still checked exactly as before, and "Stop" lets the files in progress finish.
+    const saveSometimes = () => {
+      // Saving the whole list is slow when it is long, so save every 10 files.
       // (A crash can lose at most 10 notes; the smaller copies themselves stay on disk.)
       if (++sinceSave >= 10) {
         saveState(state);
         sinceSave = 0;
       }
-    }
+    };
 
-    // Now the PDFs (only the big JPEG pictures inside are made smaller).
-    if (!stopped) {
-      const pdfWork = path.join(config.workFolder, "pdf");
-      for (const doc of state.documents) {
-        if (job.stop) { stopped = true; break; } // you clicked Stop
+    const doImage = async (img: (typeof state.images)[number]) => {
+      try {
+        if (img.outcome?.action === "replaced") { counts.alreadyDone++; return; }
+        if (img.sizeBytes < MIN_SIZE_BYTES) { counts.tooSmall++; return; }
+
+        const originalFile = safeJoin(config.imagesFolder, img.relativePath);
+        const smallerFile = safeJoin(config.workFolder, img.relativePath);
+
+        // Already done earlier and the copy is still there: skip it.
+        if (img.smaller && fs.existsSync(smallerFile)) { counts.alreadyDone++; return; }
+
+        try {
+          // The file must still be the same one we scanned.
+          if (!fs.existsSync(originalFile) || fs.statSync(originalFile).size !== img.sizeBytes) {
+            throw new Error("The file changed or disappeared since the scan. Please run Scan again.");
+          }
+          log(`Making smaller copy: ${img.relativePath}`);
+          const r = await makeSmallerCopy(originalFile, smallerFile);
+          img.smaller = {
+            sizeBytes: r.sizeBytes,
+            savingPercent: Math.round((1 - r.sizeBytes / img.sizeBytes) * 1000) / 10,
+            ssim: r.ssim,
+          };
+          delete img.error;
+          counts.made++;
+          log(`Done: ${img.relativePath} -> ${r.sizeBytes} bytes, saving ${img.smaller.savingPercent}%, SSIM ${r.ssim}`);
+        } catch (err) {
+          const message = err instanceof Error ? err.message : String(err);
+          // Remove a half-written temporary copy (it is OUR file in workFolder).
+          if (fs.existsSync(smallerFile)) fs.rmSync(smallerFile);
+          delete img.smaller;
+          img.error = message;
+          counts.failed++;
+          log(`FAILED: ${img.relativePath}: ${message}`);
+        }
+        saveSometimes();
+      } finally {
         job.done++;
-        if (doc.outcome?.action === "replaced") { counts.pdfAlreadyDone++; continue; }
-        if (doc.sizeBytes < MIN_SIZE_BYTES) { counts.pdfTooSmall++; continue; }
+      }
+    };
+
+    const pdfWork = path.join(config.workFolder, "pdf");
+    const doPdf = async (doc: (typeof state.documents)[number]) => {
+      try {
+        if (doc.outcome?.action === "replaced") { counts.pdfAlreadyDone++; return; }
+        if (doc.sizeBytes < MIN_SIZE_BYTES) { counts.pdfTooSmall++; return; }
 
         const originalFile = safeJoin(config.imagesFolder, doc.relativePath);
         const smallerFile = safeJoin(pdfWork, doc.relativePath);
 
         // Already done earlier (copy still there), or we already know there is nothing to shrink.
-        if (doc.smaller && fs.existsSync(smallerFile)) { counts.pdfAlreadyDone++; continue; }
-        if (doc.noCopyReason && !doc.smaller) { counts.pdfNoCopy++; continue; }
+        if (doc.smaller && fs.existsSync(smallerFile)) { counts.pdfAlreadyDone++; return; }
+        if (doc.noCopyReason && !doc.smaller) { counts.pdfNoCopy++; return; }
 
         try {
           if (!fs.existsSync(originalFile) || fs.statSync(originalFile).size !== doc.sizeBytes) {
@@ -254,12 +283,16 @@ app.post("/api/prepare", async (_req, res) => {
           counts.pdfFailed++;
           log(`FAILED: ${doc.relativePath}: ${message}`);
         }
-        if (++sinceSave >= 10) {
-          saveState(state);
-          sinceSave = 0;
-        }
+        saveSometimes();
+      } finally {
+        job.done++;
       }
-    }
+    };
+
+    log(`Working on ${PREPARE_PARALLEL} image(s) at a time`);
+    stopped = await runPool(state.images, PREPARE_PARALLEL, doImage);
+    // Now the PDFs (only the big JPEG pictures inside are made smaller). PDFs use more memory, so fewer at once.
+    if (!stopped) stopped = await runPool(state.documents, Math.min(2, PREPARE_PARALLEL), doPdf);
     saveState(state);
     log(`Making smaller copies ${stopped ? "STOPPED by you" : "finished"}: ${JSON.stringify(counts)}`);
     res.json({ ...counts, stopped, totals: summarize(state.images), documents: state.documents });
@@ -698,6 +731,223 @@ app.get("/api/pdf-file/:which", (req, res) => {
   } catch {
     res.status(404).send("PDF not found");
   }
+});
+
+
+// ---------- DUPLICATES ----------
+// Finding duplicates only READS your files. Removing one moves it to the vault
+// (under "_duplicates") after a checked copy is made, and it can be put back.
+
+function dupTotals(groups: DupGroup[]) {
+  const exact = groups.filter((g) => g.kind === "exact");
+  return {
+    groups: groups.length,
+    exactGroups: exact.length,
+    similarGroups: groups.length - exact.length,
+    extraFiles: groups.reduce((n, g) => n + g.files.length - 1, 0),
+    reclaimBytes: groups.reduce((n, g) => n + g.reclaimBytes, 0),
+    exactReclaimBytes: exact.reduce((n, g) => n + g.reclaimBytes, 0),
+  };
+}
+
+// One page of the groups. kind = all | exact | similar
+app.get("/api/duplicates", (req, res) => {
+  const store = loadDupStore();
+  const k = String(req.query.kind ?? "all");
+  const size = Math.min(50, Math.max(1, Math.floor(Number(req.query.size)) || 10));
+  const all = store.result?.groups ?? [];
+  const list = k === "exact" || k === "similar" ? all.filter((g) => g.kind === k) : all;
+  const pages = Math.max(1, Math.ceil(list.length / size));
+  const page = Math.min(pages, Math.max(1, Math.floor(Number(req.query.page)) || 1));
+  res.json({
+    searched: store.result !== null,
+    foundAt: store.result?.foundAt ?? null,
+    sensitivity: store.result?.sensitivity ?? "normal",
+    filesLooked: store.result?.filesLooked ?? 0,
+    totals: dupTotals(all),
+    removedCount: store.removed.filter((r) => !r.restoredAt).length,
+    total: list.length,
+    page,
+    items: list.slice((page - 1) * size, page * size),
+  });
+});
+
+// The files we moved to the vault, newest first.
+app.get("/api/duplicates/removed", (req, res) => {
+  const size = Math.min(100, Math.max(1, Math.floor(Number(req.query.size)) || 20));
+  const list = [...loadDupStore().removed].reverse();
+  const pages = Math.max(1, Math.ceil(list.length / size));
+  const page = Math.min(pages, Math.max(1, Math.floor(Number(req.query.page)) || 1));
+  res.json({ total: list.length, page, items: list.slice((page - 1) * size, page * size) });
+});
+
+app.post("/api/duplicates/find", async (req, res) => {
+  if (working) {
+    res.status(409).json({ error: "Already working. Please wait for the current run to finish." });
+    return;
+  }
+  const s = req.body?.sensitivity;
+  const sensitivity: Sensitivity = s === "strict" || s === "loose" ? s : "normal";
+  working = true;
+  startJob("Looking for duplicates", 0);
+  try {
+    const result = await findDuplicates(config, sensitivity, {
+      setTotal: (n) => { job.total = n; },
+      tick: () => { job.done++; },
+      stopped: () => job.stop,
+    });
+    if (!result) {
+      res.json({ stopped: true, message: "Stopped. The earlier results were kept." });
+      return;
+    }
+    const store = loadDupStore();
+    store.result = result;
+    saveDupStore(store);
+    const t = dupTotals(result.groups);
+    res.json({
+      stopped: false,
+      message: t.groups === 0
+        ? `No duplicates found among ${result.filesLooked} files.`
+        : `Found ${t.groups} group(s) of duplicates (${t.exactGroups} identical, ${t.similarGroups} similar). ${formatBytes(t.reclaimBytes)} could be freed.`,
+    });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    log(`Duplicate search FAILED: ${message}`);
+    res.status(500).json({ error: `Could not search for duplicates: ${message}` });
+  } finally {
+    working = false;
+    endJob();
+  }
+});
+
+// Keep one file of a group, move the others to the vault.
+app.post("/api/duplicates/remove", async (req, res) => {
+  if (working) {
+    res.status(409).json({ error: "Another job is running. Please wait for it to finish." });
+    return;
+  }
+  working = true;
+  try {
+    const store = loadDupStore();
+    const r = await removeExtras(config, store, String(req.body?.groupId ?? ""), String(req.body?.keep ?? ""));
+    forgetRemoved(r.removed.map((x) => x.relativePath));
+    res.json({ message: `Moved ${r.removed.length} file(s) to the vault. Freed ${formatBytes(r.freedBytes)}.` });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    log(`Remove duplicates FAILED: ${message}`);
+    res.status(500).json({ error: message });
+  } finally {
+    working = false;
+    endJob();
+  }
+});
+
+// Identical groups only: keep our suggested file in every one. Stops at the first problem.
+app.post("/api/duplicates/remove-exact", async (_req, res) => {
+  if (working) {
+    res.status(409).json({ error: "Another job is running. Please wait for it to finish." });
+    return;
+  }
+  const store = loadDupStore();
+  const todo = (store.result?.groups ?? []).filter((g) => g.kind === "exact");
+  if (todo.length === 0) {
+    res.status(400).json({ error: "There are no identical duplicates waiting." });
+    return;
+  }
+  working = true;
+  startJob("Removing identical duplicates", todo.length);
+  let files = 0;
+  let freed = 0;
+  let problem = "";
+  try {
+    for (const g of todo) {
+      if (job.stop) break;
+      job.done++;
+      try {
+        const r = await removeExtras(config, store, g.id, g.keep);
+        forgetRemoved(r.removed.map((x) => x.relativePath));
+        files += r.removed.length;
+        freed += r.freedBytes;
+      } catch (err) {
+        problem = `Stopped at ${g.keep}: ${err instanceof Error ? err.message : String(err)}`;
+        break;
+      }
+    }
+    const summary = `Moved ${files} identical file(s) to the vault. Freed ${formatBytes(freed)}.${job.stop ? " Stopped by you." : ""}`;
+    log(`Bulk duplicate removal: ${summary} ${problem}`);
+    if (problem) res.status(500).json({ error: `${summary} ${problem}` });
+    else res.json({ message: summary });
+  } finally {
+    working = false;
+    endJob();
+  }
+});
+
+// Put a removed file back from the vault.
+app.post("/api/duplicates/restore", async (req, res) => {
+  if (working) {
+    res.status(409).json({ error: "Another job is running. Please wait for it to finish." });
+    return;
+  }
+  working = true;
+  try {
+    const message = await restoreRemoved(config, loadDupStore(), String(req.body?.id ?? ""));
+    res.json({ message: `${message} Click Scan folder to list it again.` });
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    log(`Restore duplicate FAILED: ${message}`);
+    res.status(500).json({ error: message });
+  } finally {
+    working = false;
+    endJob();
+  }
+});
+
+// Files that left the images folder are no longer in the Images / Documents lists.
+function forgetRemoved(paths: string[]) {
+  const gone = new Set(paths);
+  const state = loadState();
+  state.images = state.images.filter((i) => !gone.has(i.relativePath));
+  state.documents = state.documents.filter((d) => !gone.has(d.relativePath));
+  saveState(state);
+}
+
+// Only files that are part of a duplicate group can be shown (preview or full size).
+function dupFile(relativePath: string): { abs: string; type: "image" | "pdf" } | null {
+  for (const g of loadDupStore().result?.groups ?? []) {
+    const f = g.files.find((x) => x.relativePath === relativePath);
+    if (f) {
+      const abs = safeJoin(config.imagesFolder, f.relativePath);
+      return fs.existsSync(abs) ? { abs, type: f.type } : null;
+    }
+  }
+  return null;
+}
+
+app.get("/api/dup-thumb", async (req, res) => {
+  const f = dupFile(String(req.query.path ?? ""));
+  if (!f || f.type !== "image") {
+    res.status(404).send("No preview");
+    return;
+  }
+  try {
+    const small = await sharp(f.abs).rotate().resize({ width: 240, height: 240, fit: "inside" }).jpeg({ quality: 75 }).toBuffer();
+    res.set("Content-Type", "image/jpeg");
+    res.set("Cache-Control", "private, max-age=60");
+    res.send(small);
+  } catch {
+    res.status(404).send("No preview");
+  }
+});
+
+app.get("/api/dup-file", (req, res) => {
+  const f = dupFile(String(req.query.path ?? ""));
+  if (!f) {
+    res.status(404).send("File not found");
+    return;
+  }
+  if (f.type === "pdf") res.type("application/pdf");
+  res.sendFile(f.abs);
 });
 
 app.listen(PORT, () => {
